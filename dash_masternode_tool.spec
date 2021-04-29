@@ -78,7 +78,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          name='znode-tool',
+          name='masternode-tool',
           debug=False,
           strip=False,
           upx=False,
@@ -87,7 +87,7 @@ exe = EXE(pyz,
 
 if os_type == 'darwin':
     app = BUNDLE(exe,
-                 name='znode-tool.app',
+                 name='masternode-tool.app',
                  icon='img/znode-tool.icns',
                  bundle_identifier=None,
                      info_plist={
@@ -107,11 +107,11 @@ os.chdir(dist_path)
 
 if os_type == 'win32':
     print('Compressing Windows executable')
-    os.system('"7z.exe" a %s %s -mx0' % (os.path.join(all_bin_dir, 'znode-tool-' + version_str + '.win' + no_bits + '.zip'),  'znode-tool.exe'))
+    os.system('"7z.exe" a %s %s -mx0' % (os.path.join(all_bin_dir, 'masternode-tool-' + version_str + '.win' + no_bits + '.zip'),  'masternode-tool.exe'))
 elif os_type == 'darwin':
     print('Compressing Mac executable')
-    os.chmod("znode-tool.app/Contents/MacOS/znode-tool", 0o754)
-    os.system('zip -r "%s" "%s"' % (os.path.join(all_bin_dir, 'znode-tool-' + version_str + '.mac.zip'),  'znode-tool.app'))
+    os.chmod("masternode-tool.app/Contents/MacOS/masternode-tool", 0o754)
+    os.system('zip -r "%s" "%s"' % (os.path.join(all_bin_dir, 'masternode-tool-' + version_str + '.mac.zip'),  'masternode-tool.app'))
 elif os_type == 'linux':
     print('Compressing Linux executable')
-    os.system('tar -zcvf %s %s' % (os.path.join(all_bin_dir, 'znode-tool-' + version_str + '.linux.tar.gz'),  'znode-tool'))
+    os.system('tar -zcvf %s %s' % (os.path.join(all_bin_dir, 'masternode-tool-' + version_str + '.linux.tar.gz'),  'masternode-tool'))

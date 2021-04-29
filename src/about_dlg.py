@@ -28,7 +28,7 @@ class AboutDlg(QDialog, ui_about_dlg.Ui_AboutDlg, WndUtils):
         img = QPixmap(os.path.join(self.app_config.app_dir, "img/znode-tool.png"))
         img = img.scaled(QSize(64, 64))
         self.lblImage.setPixmap(img)
-        self.lblAppName.setText('Znode Tool ' + self.app_version_str)
+        self.lblAppName.setText('Firo Masternode Tool ' + self.app_version_str)
         self.textAbout.setOpenExternalLinks(True)
         self.textAbout.viewport().setAutoFillBackground(False)
         if sys.platform == 'win32':

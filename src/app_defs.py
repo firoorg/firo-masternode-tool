@@ -6,10 +6,10 @@ import collections
 import logging
 from typing import List
 
-APP_NAME_SHORT = 'znode-tool'
-APP_NAME_LONG = 'Znode Tool'
-APP_DATA_DIR_NAME = '.znode-tool'
-PROJECT_URL = 'https://github.com/zcoinofficial/znode-tool-evo'
+APP_NAME_SHORT = 'masternode-tool'
+APP_NAME_LONG = 'Masternode Tool'
+APP_DATA_DIR_NAME = '.masternode-tool'
+PROJECT_URL = 'https://github.com/firorg/znode-tool-evo'
 FEE_DUFF_PER_BYTE = 1
 MIN_TX_FEE = 1000
 SCREENSHOT_MODE = False

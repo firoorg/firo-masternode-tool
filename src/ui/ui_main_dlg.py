@@ -390,7 +390,7 @@ class Ui_MainWindow(object):
         self.action_check_for_updates.setText(_translate("MainWindow", "Check For Updates"))
         self.action_open_log_file.setText(_translate("MainWindow", "Open Log File"))
         self.action_open_log_file.setShortcut(_translate("MainWindow", "Meta+Alt+L"))
-        self.action_about_app.setText(_translate("MainWindow", "About Masternode Tool..."))
+        self.action_about_app.setText(_translate("MainWindow", "About Firo Masternode Tool..."))
         self.action_about_qt.setText(_translate("MainWindow", "About Qt..."))
         self.action_about_qt.setToolTip(_translate("MainWindow", "About Qt"))
         self.action_gen_mn_priv_key_compressed.setText(_translate("MainWindow", "Generate masternode private key (compressed)"))

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Masternode Tool Evo
-GenericName=Masternode Tool Evo
+Name=Firo Masternode Tool
+GenericName=Firo Masternode Tool
 Comment=A tool for managing Firo masternodes
 Exec=/app/opt/znode-tool/src/dash_masternode_tool.py
 Icon=io.zcoin.ZnodeTool

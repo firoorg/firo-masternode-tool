@@ -687,7 +687,7 @@ padding-right: 0px;</string>
   </action>
   <action name="action_about_app">
    <property name="text">
-    <string>About Masternode Tool...</string>
+    <string>About Firo Masternode Tool...</string>
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>

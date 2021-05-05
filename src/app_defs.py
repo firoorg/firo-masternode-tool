@@ -6,9 +6,9 @@ import collections
 import logging
 from typing import List
 
-APP_NAME_SHORT = 'masternode-tool'
-APP_NAME_LONG = 'Masternode Tool'
-APP_DATA_DIR_NAME = '.masternode-tool'
+APP_NAME_SHORT = 'firo-masternode-tool'
+APP_NAME_LONG = 'Firo Masternode Tool'
+APP_DATA_DIR_NAME = '.firo-masternode-tool'
 PROJECT_URL = 'https://github.com/firorg/znode-tool-evo'
 FEE_DUFF_PER_BYTE = 1
 MIN_TX_FEE = 1000

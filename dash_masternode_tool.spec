@@ -83,12 +83,12 @@ exe = EXE(pyz,
           strip=False,
           upx=False,
           console=False,
-          icon=os.path.join('img',('znode-tool.%s' % ('icns' if os_type=='darwin' else 'ico'))))
+          icon=os.path.join('img',('firo-masternode-tool.%s' % ('icns' if os_type=='darwin' else 'ico'))))
 
 if os_type == 'darwin':
     app = BUNDLE(exe,
                  name='firo-masternode-tool.app',
-                 icon='img/znode-tool.icns',
+                 icon='img/firo-masternode-tool.icns',
                  bundle_identifier=None,
                      info_plist={
                         'NSHighResolutionCapable': 'True'

@@ -314,7 +314,7 @@ def json_to_tx(coin, data):
                 data["extraPayload"] = serialize_cbTx(data)
             else:
                 raise NotImplementedError("Only spending of V3 coinbase outputs has been inplemented. "
-                    "Please file an issue at https://github.com/firorg/znode-tool-evo/issues containing "
+                    "Please file an issue at https://github.com/firoorg/firo-masternode-tool/issues containing "
                     "the tx type=" + str(dip2_type))
             data["extraPayloadSize"] = len(data["extraPayload"]) >> 1
 
@@ -409,7 +409,7 @@ def sign_tx(hw_session: HwSessionInfo, utxos_to_spend: List[wallet_common.UtxoTy
     dash_network = hw_session.app_config.dash_network
 
     c_name = hw_session.app_config.hw_coin_name
-    coin = coins.by_name[c_name]
+    coin = coins.by_name[hw_session.app_config.get_zcoin()]
     url = hw_session.app_config.get_tx_api_url()
     coin['bitcore'].clear()
     coin['bitcore'].append(url)

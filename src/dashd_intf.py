@@ -316,9 +316,9 @@ class DashdSSH(object):
         try:
             # find dashd process id if running
             try:
-                pids = self.remote_command('ps -C "zcoind" -o pid')
+                pids = self.remote_command('ps -C "firod" -o pid')
             except UnknownError:
-                raise Exception('is zcoind running on the remote machine?')
+                raise Exception('is firod running on the remote machine?')
             pid = None
             if isinstance(pids, list):
                 pids = [pid.strip() for pid in pids]
@@ -336,7 +336,7 @@ class DashdSSH(object):
                     if len(elems) == 2:
                         executable = elems[1].strip()
                         dashd_dir = os.path.dirname(executable)
-                        dash_conf_file = dashd_dir + '/.zcoin/zcoin.conf'
+                        dash_conf_file = dashd_dir + '/.firo/firo.conf'
                         conf_lines = []
                         try:
                             conf_lines = self.remote_command('cat ' + dash_conf_file)
@@ -348,13 +348,13 @@ class DashdSSH(object):
                                 elems = cwd_lines[0].split('->')
                                 if len(elems) >= 2:
                                     cwd = elems[1]
-                                    dash_conf_file = cwd + '/.zcoin/zcoin.conf'
+                                    dash_conf_file = cwd + '/.firo/firo.conf'
                                     try:
                                         conf_lines = self.remote_command('cat ' + dash_conf_file)
                                     except Exception as e:
                                         # second method did not suceed, so assume, that conf file is located
                                         # i /home/<username>/.dashcore directory
-                                        dash_conf_file = '/home/' + self.username + '/.zcoin/zcoin.conf'
+                                        dash_conf_file = '/home/' + self.username + '/.firo/firo.conf'
                                         conf_lines = self.remote_command('cat ' + dash_conf_file)
 
                         for line in conf_lines:
@@ -383,13 +383,13 @@ class DashdIndexException(JSONRPCException):
     def __init__(self, parent_exception):
         JSONRPCException.__init__(self, parent_exception.error)
         self.message = self.message + \
-                       '\n\nMake sure the Zcoin daemon you are connecting to has the following options enabled in ' \
-                       'its zcoin.conf:\n\n' + \
+                       '\n\nMake sure the Firo daemon you are connecting to has the following options enabled in ' \
+                       'its firo.conf:\n\n' + \
                        'addressindex=1\n' + \
                        'spentindex=1\n' + \
                        'timestampindex=1\n' + \
                        'txindex=1\n\n' + \
-                       'Changing these parameters requires to execute zcoind with "-reindex" option (linux: ./zcoind -reindex)'
+                       'Changing these parameters requires to execute firod with "-reindex" option (linux: ./firod -reindex)'
 
 
 def control_rpc_call(_func=None, *, encrypt_rpc_arguments=False, allow_switching_conns=True):
@@ -748,7 +748,7 @@ class DashdInterface(WndUtils):
         """
         try:
             if not self.cur_conn_def:
-                raise Exception('There is no connections to Zcoin enabled in the configuration.')
+                raise Exception('There is no connections to Firo enabled in the configuration.')
 
             while True:
                 try:
@@ -921,10 +921,10 @@ class DashdInterface(WndUtils):
             if verify_node:
                 node_under_testnet = info.get('testnet')
                 if self.app_config.is_testnet() and not node_under_testnet:
-                    raise Exception('This RPC node works under Zcoin MAINNET, but your current configuration is '
+                    raise Exception('This RPC node works under Firo MAINNET, but your current configuration is '
                                     'for TESTNET.')
                 elif self.app_config.is_mainnet() and node_under_testnet:
-                    raise Exception('This RPC node works under Zcoin TESTNET, but your current configuration is '
+                    raise Exception('This RPC node works under Firo TESTNET, but your current configuration is '
                                     'for MAINNET.')
             return info
         else:

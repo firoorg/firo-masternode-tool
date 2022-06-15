@@ -112,6 +112,10 @@ class btchip_dmt(btchip):
         result['value'] = response
         return result
 
+    def getJCExtendedFeatures(self):
+        result = {'proprietaryApi': True}
+        return result
+
 
 def process_ledger_exceptions(func):
     """

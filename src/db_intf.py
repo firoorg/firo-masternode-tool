@@ -267,7 +267,7 @@ class DBCache(object):
             cur.execute('create index if not exists labels.tx_out_label_1 on address_label(key)')
 
         except Exception:
-            log.exception('Exception while initializing database.')
+            log.exception('Exception  while initializing database.')
             raise
 
     def table_columns_exist(self, table_name, column_names: List[str]):

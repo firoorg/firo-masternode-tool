@@ -4,7 +4,9 @@ trezor==0.11.3
 keepkey
 libusb1==3.0.0
 PyQt5==5.13.0
-pyinstaller>=3.3
+pyinstaller==4.4; sys_platform == 'linux'
+pyinstaller>=4.3; sys_platform == 'darwin'
+pyinstaller>=4.3; sys_platform == 'win32'
 paramiko>=2.2.1
 requests>=2.18.4
 mnemonic>=0.18

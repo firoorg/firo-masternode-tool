@@ -55,13 +55,13 @@
         <widget class="QLabel" name="lblDescription">
          <property name="text">
           <string>&lt;h3&gt;Description&lt;/h3&gt;
-This function allows you to generate a &lt;code&gt;rpcauth&lt;/code&gt; string with the provided username and password. The &lt;code&gt;rpcauth&lt;/code&gt; parameter is used when you want to start RPC interface on your dash node, but you don't want to leave an unencrypted password in the node's configuration file.&lt;br&gt;&lt;br&gt;
+This function allows you to generate a &lt;code&gt;rpcauth&lt;/code&gt; string with the provided username and password. The &lt;code&gt;rpcauth&lt;/code&gt; parameter is used when you want to start RPC interface on your firo node, but you don't want to leave an unencrypted password in the node's configuration file.&lt;br&gt;&lt;br&gt;
 General steps:
 &lt;ol&gt;
-&lt;li&gt;Enter the username and password that you will use to connect to your Dash node.&lt;/li&gt;
+&lt;li&gt;Enter the username and password that you will use to connect to your Firo node.&lt;/li&gt;
 &lt;li&gt;Generate the &lt;code&gt;rpcauth&lt;/code&gt; string.&lt;/li&gt;
 &lt;li&gt;Enter the resulting string into your node's &lt;code&gt;dash.conf&lt;/code&gt; file. It is also recommended to remove the &lt;code&gt;rpcuser&lt;/code&gt; and &lt;code&gt;rpcpassword&lt;/code&gt; parameters.&lt;/li&gt;
-&lt;li&gt;Restart the &lt;code&gt;dashd&lt;/code&gt; process.&lt;/li&gt;
+&lt;li&gt;Restart the &lt;code&gt;firod&lt;/code&gt; process.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h4&gt;Click &amp;lt;Continue&amp;gt; to go to step 1&lt;/h4&gt; </string>
          </property>

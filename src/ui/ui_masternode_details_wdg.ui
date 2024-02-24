@@ -178,7 +178,7 @@
         <item>
          <widget class="QRadioButton" name="rbMNTypeRegular">
           <property name="text">
-           <string>Regular (1000 Dash)</string>
+           <string>Regular (1000 Firo)</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -186,11 +186,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="rbMNTypeHPMN">
-          <property name="text">
-           <string> HPMN (4000 Dash)</string>
-          </property>
-         </widget>
         </item>
         <item>
          <spacer name="horizontalSpacer">

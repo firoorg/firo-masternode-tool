@@ -403,7 +403,7 @@
            <item>
             <widget class="QLineEdit" name="edtSecondaryPIN">
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This PIN will be used to activate passphrase saved in your Ledger Nano S.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This PIN will be used to activate passphrase saved in your Ledger Nano S/S PLUS.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="echoMode">
               <enum>QLineEdit::Password</enum>
@@ -511,7 +511,7 @@
            <item>
             <widget class="QLineEdit" name="edtPassphrase">
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This passphrase (if used) will be saved in your Ledger Nano S device and will be secured with the secondary PIN .&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This passphrase (if used) will be saved in your Ledger Nano S/S PLUS device and will be secured with the secondary PIN .&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="echoMode">
               <enum>QLineEdit::Password</enum>

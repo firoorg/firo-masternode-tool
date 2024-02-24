@@ -388,7 +388,7 @@
                     <item>
                      <widget class="QToolButton" name="btnSelectUtxosByValue">
                       <property name="toolTip">
-                       <string>Select UTXOs by the Dash value</string>
+                       <string>Select UTXOs by the Firo value</string>
                       </property>
                       <property name="text">
                        <string>Select by Value</string>

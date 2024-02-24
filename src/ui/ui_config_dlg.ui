@@ -378,7 +378,7 @@
          <item>
           <widget class="QRadioButton" name="chbHwLedgerNanoS">
            <property name="text">
-            <string>Ledger Nano S</string>
+            <string>Ledger Nano S/S PLUS</string>
            </property>
           </widget>
          </item>
@@ -485,7 +485,7 @@
        <item>
         <widget class="QCheckBox" name="chbShowDashFIATValue">
          <property name="text">
-          <string>Show DASH value in FIAT</string>
+          <string>Show FIRO value in FIAT</string>
          </property>
         </widget>
        </item>
@@ -523,7 +523,7 @@
        <item>
         <widget class="QCheckBox" name="chbShowNetworkMasternodes">
          <property name="toolTip">
-          <string>Shows a tab in the main window with a list of all masternodes in the Dash network</string>
+          <string>Shows a tab in the main window with a list of all masternodes in the Firo network</string>
          </property>
          <property name="text">
           <string>Show network masternodes tab</string>

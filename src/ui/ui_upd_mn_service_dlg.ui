@@ -192,7 +192,7 @@
          <item>
           <widget class="QToolButton" name="btnChooseAddressFromWallet">
            <property name="toolTip">
-            <string>Choose a Dash address for masternode rewards from your hardware wallet</string>
+            <string>Choose a Firo address for masternode rewards from your hardware wallet</string>
            </property>
            <property name="text">
             <string>Choose from hardware wallet</string>

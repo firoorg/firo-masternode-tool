@@ -82,13 +82,13 @@ class Ui_WdgCreateRpcauth(object):
         _translate = QtCore.QCoreApplication.translate
         WdgCreateRpcauth.setWindowTitle(_translate("WdgCreateRpcauth", "Form"))
         self.lblDescription.setText(_translate("WdgCreateRpcauth", "<h3>Description</h3>\n"
-"This function allows you to generate a <code>rpcauth</code> string with the provided username and password. The <code>rpcauth</code> parameter is used when you want to start RPC interface on your dash node, but you don\'t want to leave an unencrypted password in the node\'s configuration file.<br><br>\n"
+"This function allows you to generate a <code>rpcauth</code> string with the provided username and password. The <code>rpcauth</code> parameter is used when you want to start RPC interface on your firo node, but you don\'t want to leave an unencrypted password in the node\'s configuration file.<br><br>\n"
 "General steps:\n"
 "<ol>\n"
-"<li>Enter the username and password that you will use to connect to your Dash node.</li>\n"
+"<li>Enter the username and password that you will use to connect to your Firo node.</li>\n"
 "<li>Generate the <code>rpcauth</code> string.</li>\n"
-"<li>Enter the resulting string into your node\'s <code>dash.conf</code> file. It is also recommended to remove the <code>rpcuser</code> and <code>rpcpassword</code> parameters.</li>\n"
-"<li>Restart the <code>dashd</code> process.</li>\n"
+"<li>Enter the resulting string into your node\'s <code>firo.conf</code> file. It is also recommended to remove the <code>rpcuser</code> and <code>rpcpassword</code> parameters.</li>\n"
+"<li>Restart the <code>firod</code> process.</li>\n"
 "</ol>\n"
 "<h4>Click &lt;Continue&gt; to go to step 1</h4> "))
         self.label.setText(_translate("WdgCreateRpcauth", "User"))

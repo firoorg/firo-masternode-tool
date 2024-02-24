@@ -113,7 +113,6 @@
       <string>Clear</string>
      </property>
      <addaction name="action_clear_wallet_cache"/>
-     <addaction name="action_clear_proposals_cache"/>
     </widget>
     <addaction name="action_sign_message_with_owner_key"/>
     <addaction name="action_sign_message_with_voting_key"/>
@@ -199,7 +198,6 @@
    <addaction name="action_connect_hw"/>
    <addaction name="action_disconnect_hw"/>
    <addaction name="separator"/>
-   <addaction name="action_open_proposals_window"/>
    <addaction name="separator"/>
    <addaction name="action_hw_wallet"/>
    <addaction name="action_wallet_tools"/>
@@ -262,15 +260,6 @@
    <property name="menuRole">
     <enum>QAction::PreferencesRole</enum>
    </property>
-  </action>
-  <action name="action_open_proposals_window">
-   <property name="text">
-    <string>Proposals</string>
-   </property>
-   <property name="toolTip">
-    <string>Proposals</string>
-   </property>
-  </action>
   <action name="action_connect_hw">
    <property name="text">
     <string>Connect Hardware Wallet</string>
@@ -363,9 +352,6 @@
     <string>Wallet Cache</string>
    </property>
   </action>
-  <action name="action_clear_proposals_cache">
-   <property name="text">
-    <string>Proposals Cache</string>
    </property>
   </action>
   <action name="action_restore_config_from_backup">

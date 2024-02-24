@@ -200,7 +200,7 @@ class Ui_UpdMnRegistrarDlg(object):
         self.lblGeneralErrorMsg.setText(_translate("UpdMnRegistrarDlg", "..."))
         self.lblPayoutAddress.setText(_translate("UpdMnRegistrarDlg", "Payout address"))
         self.edtPayoutAddress.setPlaceholderText(_translate("UpdMnRegistrarDlg", "<unchanged>"))
-        self.btnChooseAddressFromWallet.setToolTip(_translate("UpdMnRegistrarDlg", "Choose a Dash address for masternode rewards from your hardware wallet"))
+        self.btnChooseAddressFromWallet.setToolTip(_translate("UpdMnRegistrarDlg", "Choose a Firo address for masternode rewards from your hardware wallet"))
         self.btnChooseAddressFromWallet.setText(_translate("UpdMnRegistrarDlg", "Choose from hardware wallet"))
         self.lblOperatorKey.setText(_translate("UpdMnRegistrarDlg", "<b>Operator private key</b> "))
         self.chbLegacyOperatorKey.setToolTip(_translate("UpdMnRegistrarDlg", "Check this for masternodes registered prior to the v19 hard fork"))

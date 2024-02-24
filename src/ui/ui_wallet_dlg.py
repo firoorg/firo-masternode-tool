@@ -322,7 +322,7 @@ class Ui_WalletDlg(object):
         self.lblViewModeOptions.setToolTip(_translate("WalletDlg", "Options"))
         self.btnSelectAllMasternodes.setToolTip(_translate("WalletDlg", "Select all masternode addresses"))
         self.btnSelectAllMasternodes.setText(_translate("WalletDlg", "Select All"))
-        self.btnSelectUtxosByValue.setToolTip(_translate("WalletDlg", "Select UTXOs by the Dash value"))
+        self.btnSelectUtxosByValue.setToolTip(_translate("WalletDlg", "Select UTXOs by the Firo value"))
         self.btnSelectUtxosByValue.setText(_translate("WalletDlg", "Select by Value"))
         self.btnSelectAllUtxos.setToolTip(_translate("WalletDlg", "Select All UTXOs"))
         self.btnSelectAllUtxos.setText(_translate("WalletDlg", "Select All"))

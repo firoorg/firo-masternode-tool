@@ -1161,7 +1161,7 @@ class HwSessionInfo(HWSessionBase):
                             addr = get_address(self, dash_utils.get_default_bip32_path(
                                 self.__runtime_data.dash_network))
                             if dash_utils.validate_address(addr, self.__runtime_data.dash_network):
-                                found_testnet_support = False
+                                found_testnet_support = True
 
                         if not found_testnet_support:
                             url = get_note_url('DMT0002')
@@ -1429,7 +1429,7 @@ def sign_tx(hw_session: HwSessionInfo, utxos_to_spend: List[UtxoType], tx_output
     Creates a signed transaction.
     :param hw_session:
     :param utxos_to_spend: list of utxos to send
-    :param tx_outputs: destination addresses. Fields: 0: dest Dash address. 1: the output value in satoshis,
+    :param tx_outputs: destination addresses. Fields: 0: dest Firo address. 1: the output value in satoshis,
         2: the bip32 path of the address if the output is the change address or None otherwise
     :param tx_fee: transaction fee
     :return: tuple (serialized tx, total transaction amount in satoshis)

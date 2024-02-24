@@ -325,7 +325,7 @@ class WalletDlg(QDialog, ui_wallet_dlg.Ui_WalletDlg, WndUtils):
             self.btnCancel.show()
             self.btnChooseAddressAndExit.setDisabled(True)
             self.cboAddressSourceMode.setDisabled(True)  # don't allow changing the address source mode when selecting
-                                                         # Dash address
+                                                         # Firo address
             self.btnSend.hide()
             self.dest_widget.hide()
 
@@ -651,7 +651,7 @@ class WalletDlg(QDialog, ui_wallet_dlg.Ui_WalletDlg, WndUtils):
     @pyqtSlot()
     def on_btnSend_clicked(self):
         """
-        Sends funds to Dash address specified by user.
+        Sends funds to Firo address specified by user.
         """
         try:
             self.allow_fetch_transactions = False

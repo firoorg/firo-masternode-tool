@@ -426,12 +426,12 @@ class UpdMnRegistrarDlg(QDialog, QDetectThemeChange, ui_upd_mn_registrar_dlg.Ui_
             payout_address = self.edtPayoutAddress.text()
             if payout_address:
                 if not validate_address(payout_address, self.app_config.dash_network):
-                    self.payout_address_err_msg = 'Invalid payout Dash address'
+                    self.payout_address_err_msg = 'Invalid payout Firo address'
                     errors_occurred = True
                 else:
                     self.dmn_new_payout_address = payout_address
         else:
-            self.dmn_new_payout_address = ''
+            self.dmn_new_payout_address = self.dmn_prev_payout_address
 
         self.update_registrar_rpc_command = 'update_registrar'
         if self.new_bls_scheme_active:
@@ -494,7 +494,7 @@ class UpdMnRegistrarDlg(QDialog, QDetectThemeChange, ui_upd_mn_registrar_dlg.Ui_
                     self.dmn_new_voting_privkey = ''
                     if not validate_address(self.dmn_new_voting_address, self.app_config.dash_network):
                         self.edtVotingKey.setFocus()
-                        self.voting_key_err_msg = 'Invalid voting Dash address.'
+                        self.voting_key_err_msg = 'Invalid voting Firo address.'
                         errors_occurred = True
             else:
                 self.dmn_new_voting_address = self.dmn_prev_voting_address
@@ -530,10 +530,10 @@ class UpdMnRegistrarDlg(QDialog, QDetectThemeChange, ui_upd_mn_registrar_dlg.Ui_
                 fee_source_info=f'"<span style="color:{green_color}">feeSourceAddress</span>"')
 
             msg = "<ol>" \
-                  "<li>Start a Dash Core wallet with sufficient funds to cover a transaction fee.</li>"
-            msg += "<li>Import the owner private key into the Dash Core wallet if you haven't done this " \
+                  "<li>Start a Firo Core wallet with sufficient funds to cover a transaction fee.</li>"
+            msg += "<li>Import the owner private key into the Firo Core wallet if you haven't done this " \
                    "before.</li>"
-            msg += "<li>Execute the following command in the Dash Core debug console:<br><br>"
+            msg += "<li>Execute the following command in the Firo Core debug console:<br><br>"
             msg += "  <code>" + cmd + '</code></li><br>'
             msg += f'Replace <span style="color:{green_color}">feeSourceAddress</span> with the address being the ' \
                    'source of the transaction fee.'
@@ -603,11 +603,11 @@ class UpdMnRegistrarDlg(QDialog, QDetectThemeChange, ui_upd_mn_registrar_dlg.Ui_
         # verify the owner key used in the configuration
         if self.masternode.owner_key_type == InputKeyType.PRIVATE and self.masternode.owner_private_key:
             owner_address = wif_privkey_to_address(self.masternode.owner_private_key,
-                                                   self.app_config.dash_network)
+                                              self.app_config.dash_network)
             if owner_address != self.owner_address:
                 if WndUtils.query_dlg(
                         'Inconsistency of the owner key between the app configuration and the data '
-                        'on the Firo network.\nDo you really want to continue?',
+                        'on the Dash network.\nDo you really want to continue?',
                         buttons=QMessageBox.Yes | QMessageBox.Cancel,
                         default_button=QMessageBox.Cancel, icon=QMessageBox.Warning) == QMessageBox.Cancel:
                     return
@@ -615,7 +615,6 @@ class UpdMnRegistrarDlg(QDialog, QDetectThemeChange, ui_upd_mn_registrar_dlg.Ui_
             WndUtils.error_msg('To use this feature, you need to have the owner private key in your masternode '
                                'configuration.')
             return
-
         try:
             funding_address = ''
 

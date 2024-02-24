@@ -213,7 +213,7 @@ class ConfigDlg(QDialog, Ui_ConfigDlg, WndUtils):
         self.chbDontUseFileDialogs.setChecked(self.local_config.dont_use_file_dialogs)
         self.chbEncryptConfigFile.setChecked(self.local_config.encrypt_config_file)
         self.chbFetchDataAfterStart.setChecked(self.local_config.fetch_network_data_after_start)
-        self.chbShowDashFIATValue.setChecked(self.local_config.show_dash_value_in_fiat)
+        self.chbShowDashFIATValue.setChecked(False)
         self.chbUIDarkMode.setChecked(self.local_config.ui_use_dark_mode)
         self.chbShowNetworkMasternodes.setChecked(self.local_config.show_network_masternodes_tab)
 
@@ -794,9 +794,9 @@ class ConfigDlg(QDialog, Ui_ConfigDlg, WndUtils):
                     self.disable_cfg_update = True
                     if isinstance(dashd_conf, tuple) and len(dashd_conf) >= 2:
                         if not dashd_conf[0]:
-                            self.infoMsg('Remore Firo daemon seems to be shut down')
+                            self.info_msg('Remore Firo daemon seems to be shut down')
                         elif not dashd_conf[1]:
-                            self.infoMsg('Could not find remote dashd.conf file')
+                            self.info_msg('Could not find remote dashd.conf file')
                         else:
                             file = dashd_conf[1]
                             rpcuser = file.get('rpcuser', '')

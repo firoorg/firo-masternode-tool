@@ -286,7 +286,7 @@ def _ledger_extract_address(addr: str) -> str:
     if match and len(match.groups()) == 1:
         addr = match.group(1)
     elif not dash_utils.validate_address(addr):
-        raise Exception("Invalid Dash address format returned from getWalletPublicKey: " + addr)
+        raise Exception("Invalid Firo address format returned from getWalletPublicKey: " + addr)
     return addr
 
 

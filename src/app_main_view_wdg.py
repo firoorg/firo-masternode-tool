@@ -627,10 +627,6 @@ class WdgAppMainView(QWidget, QDetectThemeChange, ui_app_main_view_wdg.Ui_WdgApp
                 f'.value {{color:{value_color}}}'
                 '</style>'
                 '<table>'
-                f'<tr><td class="title">Next superblock date</td><td class="value">{app_utils.to_string(gi.next_superblock_date) if gi.loaded else "?"}</td></tr>'
-                f'<tr><td class="title">Voting deadline</td><td class="value">{app_utils.to_string(gi.voting_deadline_date) if gi.loaded else "?"}</td></tr>'
-                f'<tr><td class="title">Voting deadline in</td><td class="value">{gi.voting_deadline_in if gi.loaded else "?"}</td></tr>'
-                f'<tr><td class="title">Budget available</td><td class="value">{app_utils.to_string(round(gi.budget_available, 2)) + " Dash" if gi.loaded else "?"}</td></tr>'
                 f'<tr><td class="title">Masternodes (ALL)</td><td class="value">{str(gi.masternode_count) if gi.loaded else "?"}</td></tr>'
             )
 
@@ -1289,7 +1285,6 @@ class WdgAppMainView(QWidget, QDetectThemeChange, ui_app_main_view_wdg.Ui_WdgApp
         _ginfo = self.dashd_intf.getgovernanceinfo()
         cur_block_height = self.dashd_intf.getblockcount()
         gi.last_superblock = _ginfo.get('lastsuperblock')
-        gi.next_superblock = _ginfo.get('nextsuperblock')
         gi.superblock_cycle = _ginfo.get('superblockcycle')
         deadline_blocks = round(gi.superblock_cycle / 10)
 
@@ -1302,35 +1297,8 @@ class WdgAppMainView(QWidget, QDetectThemeChange, ui_app_main_view_wdg.Ui_WdgApp
         if gi.next_superblock_ts == 0:
             gi.next_superblock_ts = last_superblock_ts + (gi.next_superblock - gi.last_superblock) * 2.5 * 60
 
-        gi.voting_deadline_ts = gi.next_superblock_ts - (deadline_blocks * 2.5 * 60)
-        gi.next_superblock_date = datetime.fromtimestamp(gi.next_superblock_ts)
-        gi.voting_deadline_date = datetime.fromtimestamp(gi.voting_deadline_ts)
-        gi.budget_available = float(self.dashd_intf.getsuperblockbudget(gi.next_superblock))
         deadline_block = gi.next_superblock - deadline_blocks
-        gi.voting_deadline_passed = deadline_block <= cur_block_height < gi.next_superblock
 
-        if gi.voting_deadline_passed:
-            gi.voting_deadline_in = 'passed'
-        else:
-            gi.voting_deadline_in = ''
-            dl_diff = gi.voting_deadline_ts - time.time()
-            if dl_diff > 0:
-                if dl_diff < 3600:
-                    dl_str = app_utils.seconds_to_human(dl_diff, out_seconds=False, out_minutes=True, out_hours=False,
-                                                        out_days=False, out_weeks=False)
-                elif dl_diff < 3600 * 3:
-                    dl_str = app_utils.seconds_to_human(dl_diff, out_seconds=False, out_minutes=True, out_hours=True,
-                                                        out_days=False, out_weeks=False)
-                elif dl_diff < 3600 * 24:
-                    dl_str = app_utils.seconds_to_human(dl_diff, out_seconds=False, out_minutes=False, out_hours=True,
-                                                        out_days=False, out_weeks=False)
-                elif dl_diff < 3600 * 24 * 3:
-                    dl_str = app_utils.seconds_to_human(dl_diff, out_seconds=False, out_minutes=False, out_hours=True,
-                                                        out_days=True, out_weeks=False)
-                else:
-                    dl_str = app_utils.seconds_to_human(dl_diff, out_seconds=False, out_minutes=False, out_hours=False,
-                                                        out_days=True, out_weeks=False)
-                gi.voting_deadline_in = dl_str
 
         # masternodes
         mns = self.dashd_intf.masternodes
@@ -1442,7 +1410,8 @@ class WdgAppMainView(QWidget, QDetectThemeChange, ui_app_main_view_wdg.Ui_WdgApp
                     self.mns_status[mn_cfg] = mn_stat
 
                 if mn_cfg.collateral_tx and str(mn_cfg.collateral_tx_index):
-                    collateral_id = mn_cfg.collateral_tx + '-' + str(mn_cfg.collateral_tx_index)
+                    collateral_id = f'COutPoint({mn_cfg.collateral_tx}, {mn_cfg.collateral_tx_index})'
+
                 else:
                     collateral_id = None
                 if mn_cfg.ip and mn_cfg.tcp_port:
@@ -1516,11 +1485,6 @@ class WdgAppMainView(QWidget, QDetectThemeChange, ui_app_main_view_wdg.Ui_WdgApp
             check_finishing()
             # in the mn list view show the data that has been read so far
             WndUtils.call_in_main_thread(self.refresh_cfg_masternodes_view)
-
-            # fetch non-cachaed data
-            check_finishing()
-            self.fetch_governance_info()
-            check_finishing()
 
             try:
                 log.info('fetch_mempool_txes start')
@@ -2293,12 +2257,6 @@ class NetworkStatus:
         self.next_superblock = -1
         self.superblock_cycle = 0
         self.next_superblock_ts = -1
-        self.next_superblock_date: Optional[datetime] = None
-        self.voting_deadline_ts = -1
-        self.voting_deadline_date: Optional[datetime] = None
-        self.voting_deadline_in: str = ''
-        self.voting_deadline_passed = False
-        self.budget_available: Optional[float] = None
         self.masternode_count_by_status: Dict[str, int] = {}
         self.masternode_count = 0
         self.blocks = 0
@@ -2387,12 +2345,14 @@ class MasternodeStatus:
         self.messages.clear()
 
     def check_mismatch(self, masternode_cfg: MasternodeConfig, masternode_info: Masternode):
-        if not masternode_cfg.collateral_tx or masternode_cfg.collateral_tx_index is None or \
-                str(masternode_cfg.collateral_tx) + '-' + str(masternode_cfg.collateral_tx_index) != \
-                masternode_info.ident:
-            self.collateral_tx_mismatch = True
+        if str(masternode_cfg.collateral_tx) + '-' + str(masternode_cfg.collateral_tx_index) != masternode_info.ident:
+                    elems = masternode_info.ident.split('-')
+                    if len(elems) == 2:
+                        self.collateral_tx_mismatch = True
         else:
             self.collateral_tx_mismatch = False
+
+
 
         if masternode_cfg.protx_hash != masternode_info.protx_hash:
             self.protx_mismatch = True
@@ -2423,9 +2383,8 @@ class MasternodeStatus:
         if masternode_cfg.dmn_user_roles & DMN_ROLE_OPERATOR:
             operator_pubkey_cfg = masternode_cfg.get_operator_pubkey(self.new_bls_scheme)
             self.network_operator_public_key = masternode_info.pubkey_operator
-            if not operator_pubkey_cfg or operator_pubkey_cfg[2:] != masternode_info.pubkey_operator[2:]:
-                # don't compare the first byte to overcome the difference being the result of the new-old BLS
-                # public key generation scheme
+            if self.network_operator_public_key and operator_pubkey_cfg and \
+                                    self.network_operator_public_key != operator_pubkey_cfg:
                 self.operator_pubkey_mismatch = True
             else:
                 self.operator_pubkey_mismatch = False

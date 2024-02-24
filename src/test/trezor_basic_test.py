@@ -33,8 +33,8 @@ def main():
         # # Get the first address of first BIP44 account
         # # (should be the same address as shown in wallet.trezor.io)
         bip32_path = client.expand_path("m/44'/5'/0'/0/0")
-        address = client.get_address('Dash', bip32_path)
-        print('Dash address:', address)
+        address = client.get_address('Firo', bip32_path)
+        print('Firo address:', address)
 
         client.close()
     except Exception as e:

@@ -66,13 +66,16 @@ Sometimes it is necessary to change the Dash address to which the masternode ear
 
 #### Step 1. Launch the *Update payout address* dialog
 To do this, in the list of masternodes in the main window, select the masternode for which you want to make the change, then expand the context menu under the **MN actions** button and click the **Update Payout Address** item.
+* you should import your private key in firo core for update payout address
+* you should have usemnemonic=0 on your firo.conf for importing private key (importprivkey RPC)
+* leave firo-qt open(in working order)
 
 #### Step 2. Enter the new payout address
 
 #### Step 3. Publish an update transaction
 You have two options for doing this:
 * using public RPC nodes: to do this, click the **Send Update Transaction** button (Scenario 1), bearing in mind that you must have properly configured connections in the application options (see here)
-* using your own Dash node: follow the steps outlined in the description box of the window (Scenario 2) 
+* using your own Dash node: follow the steps outlined in the description box of the window (Scenario 2)
 
 ![Update masternode payout address](img/update-mn-payout-address.png)
 

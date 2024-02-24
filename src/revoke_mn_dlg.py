@@ -216,8 +216,7 @@ class RevokeMnDlg(QDialog, QDetectThemeChange, ui_revoke_mn_dlg.Ui_RevokeMnDlg, 
             params = ['revoke',
                       self.dmn_protx_hash,
                       self.masternode.operator_private_key,
-                      self.revocation_reason,
-                      funding_address]
+                      self.revocation_reason]
 
             try:
                 revoke_support = self.dashd_intf.checkfeaturesupport('protx_revoke',

@@ -306,26 +306,65 @@ class DashdSSH(object):
 
     def find_dashd_config(self):
         """
-        Try to read the configuration of remote dash daemon. In particular, we need parameters concerning rpc
+        Try to read configuration of remote dash daemon. In particular we need parameters concering rpc
         configuration.
         :return: tuple (dashd_running, dashd_config_found, dashd config file contents as dict)
-                or error string in error occurred.
+                or error string in error occured
         """
-        config = {}
+        dashd_running = False
+        dashd_config_found = False
         if not self.ssh:
             raise Exception('SSH session not ready')
         try:
-            # check if dash.conf exists under the default location
-            dash_conf_path = '~/.dashcore/dash.conf'
-            self.remote_command('ls ' + dash_conf_path)
+            # find dashd process id if running
+            try:
+                pids = self.remote_command('ps -C "firod" -o pid')
+            except UnknownError:
+                raise Exception('is firod running on the remote machine?')
+            pid = None
+            if isinstance(pids, list):
+                pids = [pid.strip() for pid in pids]
+            if len(pids) >= 2 and pids[0] == 'PID' and re.match('\d+', pids[1]):
+                pid = pids[1]
+            elif len(pids) >= 1 and re.match('\d+', pids[0]):
+                pid = pids[1]
+            config = {}
+            if pid:
+                dashd_running = True
+                # using dashd pid find its executable path and then .dashcore directory and finally dash.conf file
+                executables = self.remote_command('ls -l /proc/' + str(pid) + '/exe')
+                if executables and len(executables) >= 1:
+                    elems = executables[0].split('->')
+                    if len(elems) == 2:
+                        executable = elems[1].strip()
+                        dashd_dir = os.path.dirname(executable)
+                        dash_conf_file = dashd_dir + '/.firo/firo.conf'
+                        conf_lines = []
+                        try:
+                            conf_lines = self.remote_command('cat ' + dash_conf_file)
+                        except Exception as e:
+                            # probably error no such file or directory
+                            # try to read dashd's cwd + cmdline
+                            cwd_lines = self.remote_command('ls -l /proc/' + str(pid) + '/cwd')
+                            if cwd_lines:
+                                elems = cwd_lines[0].split('->')
+                                if len(elems) >= 2:
+                                    cwd = elems[1]
+                                    dash_conf_file = cwd + '/.firo/firo.conf'
+                                    try:
+                                        conf_lines = self.remote_command('cat ' + dash_conf_file)
+                                    except Exception as e:
+                                        # second method did not suceed, so assume, that conf file is located
+                                        # i /home/<username>/.dashcore directory
+                                        dash_conf_file = '/home/' + self.username + '/.firo/firo.conf'
+                                        conf_lines = self.remote_command('cat ' + dash_conf_file)
 
-            conf_lines = self.remote_command('cat ' + dash_conf_path)
-            for line in conf_lines:
-                elems = [e.strip() for e in line.split('=')]
-                if len(elems) == 2:
-                    config[elems[0]] = elems[1]
-            dashd_config_found = True
-            return dashd_config_found, config
+                        for line in conf_lines:
+                            elems = [e.strip() for e in line.split('=')]
+                            if len(elems) == 2:
+                                config[elems[0]] = elems[1]
+                        dashd_config_found = True
+            return dashd_running, dashd_config_found, config
         except Exception as e:
             return str(e)
 
@@ -530,12 +569,13 @@ class Masternode(AttrsProtected):
         self.dmt_active = src.dmt_active
 
     def copy_from_json(self, mn_ident: str, mn_json: Dict):
-        m = re.match(r'([a-zA-F0-9]+)-(\d+)', mn_ident, re.IGNORECASE)
+        m = re.match(r'COutPoint\(([a-fA-F0-9]+),\s*(\d+)\)', mn_ident)
         if m and len(m.groups()) == 2:
             coll_hash = m.group(1)
             coll_index = int(m.group(2))
         else:
             raise Exception('Invalid masternode ident string: ' + mn_ident)
+
 
         self.ident = mn_ident
         self.type = mn_json.get('type')
@@ -1242,7 +1282,7 @@ class DashdInterface(WndUtils):
                         mn.modified = False
 
                     log.info('Fetching masternode data from the network')
-                    mns_json = self.proxy.masternodelist(*args)
+                    mns_json = self.proxy.evoznodelist(*args)
                     app_cache.set_value(f'MasternodesLastReadTime_{self.app_config.dash_network}', int(time.time()))
                     log.info('Finished fetching masternode data from the network')
 
@@ -1315,7 +1355,7 @@ class DashdInterface(WndUtils):
 
                     return self.masternodes
             else:
-                mns = self.proxy.masternodenodelist(*args)
+                mns = self.proxy.evoznodelist(*args)
                 return mns
         else:
             raise Exception('Not connected')

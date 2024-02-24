@@ -312,7 +312,7 @@ class WalletUtxosListDlg(QDialog, ui_find_coll_tx_dlg.Ui_ListCollateralTxsDlg, w
         utxos = []
         break_scanning = False
         txes_cnt = 0
-        msg = f'Scanning wallet transactions for {utxo_value_to_find} Dash UTXOs.<br>' \
+        msg = f'Scanning wallet transactions for {utxo_value_to_find} Firo UTXOs.<br>' \
               'This may take a while (<a href="break">break</a>)....'
         ctrl.dlg_config(dlg_title="Scanning wallet", show_progress_bar=False)
         ctrl.display_msg(msg)

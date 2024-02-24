@@ -292,7 +292,7 @@ class UpdMnServiceDlg(QDialog, QDetectThemeChange, ui_upd_mn_service_dlg.Ui_UpdM
             msg = self.payout_address_validation_err_msg
             style = 'error'
         else:
-            msg = 'Dash address for operator reward. Fill in only if the option to split the masternode payout ' \
+            msg = 'Firo address for operator reward. Fill in only if the option to split the masternode payout ' \
                   'between owner and operator was set when registering masternode. Otherwise, leave it blank.'
             style = 'info'
         set_info_label(self.lblOperatorPayoutMsg, msg, style)
@@ -350,7 +350,7 @@ class UpdMnServiceDlg(QDialog, QDetectThemeChange, ui_upd_mn_service_dlg.Ui_UpdM
         self.payout_address_validation_err_msg = ''
         if payout_address:
             if not validate_address(payout_address, self.app_config.dash_network):
-                self.payout_address_validation_err_msg = 'Invalid payout Dash address'
+                self.payout_address_validation_err_msg = 'Invalid payout Firo address'
                 errors_occurred = True
             else:
                 self.new_operator_payout_address = payout_address
@@ -480,8 +480,8 @@ class UpdMnServiceDlg(QDialog, QDetectThemeChange, ui_upd_mn_service_dlg.Ui_UpdM
 
             msg = ''
             msg += '<ol>' \
-                   '<li>Start a Dash Core wallet with sufficient funds to cover a transaction fee.</li>'
-            msg += '<li>Execute the following command in the Dash Core debug console:<br><br>'
+                   '<li>Start a Firo Core wallet with sufficient funds to cover a transaction fee.</li>'
+            msg += '<li>Execute the following command in the Firo Core debug console:<br><br>'
             msg += '  <code>' + cmd + '</code></li><br>'
             msg += f'Replace <span style="color:{green_color}">feeSourceAddress</span> with the address being the ' \
                    'source of the transaction fee.'

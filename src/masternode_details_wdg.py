@@ -67,7 +67,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
         self.act_view_as_owner_private_key = QAction('View as private key', self)
         self.act_view_as_owner_private_key.setData('privkey')
         self.act_view_as_owner_private_key.triggered.connect(self.on_owner_view_key_type_changed)
-        self.act_view_as_owner_public_address = QAction('View as Dash address', self)
+        self.act_view_as_owner_public_address = QAction('View as Firo address', self)
         self.act_view_as_owner_public_address.setData('address')
         self.act_view_as_owner_public_address.triggered.connect(self.on_owner_view_key_type_changed)
         self.act_view_as_owner_public_key = QAction('View as public key', self)
@@ -92,7 +92,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
         self.act_view_as_voting_private_key = QAction('View as private key', self)
         self.act_view_as_voting_private_key.setData('privkey')
         self.act_view_as_voting_private_key.triggered.connect(self.on_voting_view_key_type_changed)
-        self.act_view_as_voting_public_address = QAction('View as Dash address', self)
+        self.act_view_as_voting_public_address = QAction('View as Firo address', self)
         self.act_view_as_voting_public_address.setData('address')
         self.act_view_as_voting_public_address.triggered.connect(self.on_voting_view_key_type_changed)
         self.act_view_as_voting_public_key = QAction('View as public key', self)
@@ -365,7 +365,6 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
         self.chbRoleOperator.setEnabled(self.edit_mode)
         self.chbRoleOwner.setEnabled(self.edit_mode)
         self.rbMNTypeRegular.setEnabled(self.edit_mode)
-        self.rbMNTypeHPMN.setEnabled(self.edit_mode)
         self.edtName.setReadOnly(self.edit_mode is False)
         self.edtIP.setReadOnly(self.edit_mode is False)
         self.edtPort.setReadOnly(self.edit_mode is False)
@@ -421,7 +420,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
             if cur_key_type == 'privkey':
                 lbl = key_desc_prefix + ' private key'
             elif cur_key_type == 'address':
-                lbl = key_desc_prefix + ' Dash address'
+                lbl = key_desc_prefix + ' Firo address'
             elif cur_key_type == 'pubkey':
                 lbl = key_desc_prefix + ' public key'
             elif cur_key_type == 'pubkeyhash':
@@ -453,7 +452,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
                 if not self.edit_mode and not self.act_view_as_owner_private_key.isChecked():
                     style = 'hl2'
             else:
-                key_type, tooltip_anchor, placeholder_text = ('address', 'privkey', 'Enter the owner Dash address')
+                key_type, tooltip_anchor, placeholder_text = ('address', 'privkey', 'Enter the owner Firo address')
                 if not self.edit_mode:
                     style = 'hl1' if self.act_view_as_owner_public_address.isChecked() else 'hl2'
 
@@ -462,7 +461,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
                 if self.masternode.owner_key_type == InputKeyType.PRIVATE:
                     err_msg = 'Invalid owner private key format'
                 else:
-                    err_msg = 'Invalid owner Dash address format'
+                    err_msg = 'Invalid owner Firo address format'
             set_label_text(self.lblOwnerKey, self.lblOwnerKeyMsg, 'Owner', key_type, tooltip_anchor,
                            self.ag_owner_key, style, err_msg)
             self.edtOwnerKey.setPlaceholderText(placeholder_text)
@@ -499,7 +498,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
                 if not self.edit_mode and not self.act_view_as_voting_private_key.isChecked():
                     style = 'hl2'
             else:
-                key_type, tooltip_anchor, placeholder_text = ('address', 'privkey', 'Enter the voting Dash address')
+                key_type, tooltip_anchor, placeholder_text = ('address', 'privkey', 'Enter the voting Firo address')
                 if not self.edit_mode:
                     style = 'hl1' if self.act_view_as_voting_public_address.isChecked() else 'hl2'
 
@@ -508,7 +507,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
                 if self.masternode.voting_key_type == InputKeyType.PRIVATE:
                     err_msg = 'Invalid voting private key format'
                 else:
-                    err_msg = 'Invalid voting Dash address format'
+                    err_msg = 'Invalid voting Firo address format'
             set_label_text(self.lblVotingKey, self.lblVotingKeyMsg, 'Voting', key_type, tooltip_anchor,
                            self.ag_voting_key, style, err_msg)
             self.edtVotingKey.setPlaceholderText(placeholder_text)
@@ -585,7 +584,6 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
             self.chbRoleOperator.setChecked(self.masternode.dmn_user_roles & DMN_ROLE_OPERATOR)
             self.chbRoleVoting.setChecked(self.masternode.dmn_user_roles & DMN_ROLE_VOTING)
             self.rbMNTypeRegular.setChecked(self.masternode.masternode_type == MasternodeType.REGULAR)
-            self.rbMNTypeHPMN.setChecked(self.masternode.masternode_type == MasternodeType.HPMN)
             self.edtName.setText(self.masternode.name)
             self.edtIP.setText(self.masternode.ip)
             self.edtPort.setText(str(self.masternode.tcp_port))
@@ -865,7 +863,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
     @pyqtSlot(str)
     def on_lblOwnerKey_linkHovered(self, link):
         if link == 'address':
-            tt = 'Change input type to Dash address'
+            tt = 'Change input type to Firo address'
         else:
             tt = 'Change input type to private key'
         self.lblOwnerKey.setToolTip(tt)
@@ -881,7 +879,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
     @pyqtSlot(str)
     def on_lblVotingKey_linkHovered(self, link):
         if link == 'address':
-            tt = 'Change input type to Dash address'
+            tt = 'Change input type to Firo address'
         else:
             tt = 'Change input type to private key'
         self.lblVotingKey.setToolTip(tt)
@@ -1004,15 +1002,6 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
         if not self.updating_ui:
             if checked:
                 self.masternode.masternode_type = MasternodeType.REGULAR
-            self.update_ui_controls_state()
-            self.on_mn_data_modified()
-            self.role_modified.emit()
-
-    @pyqtSlot(bool)
-    def on_rbMNTypeHPMN_toggled(self, checked):
-        if not self.updating_ui:
-            if checked:
-                self.masternode.masternode_type = MasternodeType.HPMN
             self.update_ui_controls_state()
             self.on_mn_data_modified()
             self.role_modified.emit()
@@ -1405,7 +1394,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
             address = self.edtCollateralAddress.text()
             if self.edtCollateralTxHash.text():
                 # If there is any value in the collateral tx edit box, don't automatically apply the possible
-                # result (if only one UTXO was found). We want to prevent the user from missing the fact, that
+                # result (if only one xwO was found). We want to prevent the user from missing the fact, that
                 # the value has been replaced with another
                 auto_apply_result = False
             else:
@@ -1416,7 +1405,7 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
                 address, self.hw_session, apply_utxo, auto_apply_result)
 
             if not found:
-                msg = f'Could not find any UTXO of {dash_value_to_find} Dash value'
+                msg = f'Could not find any UTXO of {dash_value_to_find} Firo value'
                 if address:
                     msg += f' assigned to address {address}.'
                 else:

@@ -98,7 +98,7 @@ def validate_bip32_path(path: str) -> bool:
 
 
 def pubkey_to_address(pub_key, dash_network: str):
-    """Convert public key to a Dash address."""
+    """Convert public key to a Firo address."""
     pubkey_bin = bytes.fromhex(pub_key)
     pub_hash = bitcoin.bin_hash160(pubkey_bin)
     data = bytes([get_chain_params(dash_network).PREFIX_PUBKEY_ADDRESS]) + pub_hash
@@ -125,7 +125,7 @@ def wif_privkey_to_address(privkey: str, dash_network: str):
 
 
 def validate_address(address: str, dash_network: typing.Optional[str] = None) -> bool:
-    """Validates if the 'address' is a valid Dash address.
+    """Validates if the 'address' is a valid Firo address.
     :address: address to be validated
     :dash_network: the dash network type against which the address will be validated; if the value is None, then
       the network type prefix validation will be skipped
@@ -244,7 +244,7 @@ def validate_bls_pubkey(pubkey: str, new_bls_scheme: bool) -> bool:
 
 def bls_privkey_to_pubkey(privkey: str, new_bls_scheme: bool) -> str:
     if new_bls_scheme:
-        return bls_privkey_to_pubkey_basic(privkey)
+        return bls_privkey_to_pubkey_legacy(privkey)
     else:
         return bls_privkey_to_pubkey_legacy(privkey)
 
@@ -266,10 +266,7 @@ def bls_privkey_to_pubkey_legacy(privkey: str) -> str:
     :param privkey: BLS privkey as a hex string
     :return: BLS pubkey as a hex string.
     """
-    pk_bin = bytes.fromhex(privkey)
-    if len(pk_bin) != 32:
-        raise Exception(f'Invalid private key length: {len(pk_bin)} (should be 32)')
-    pk = bls_legacy.PrivateKey.from_bytes(pk_bin)
+    pk = bls_legacy.PrivateKey.from_bytes(bytes.fromhex(privkey))
     pubkey = pk.get_public_key()
     pubkey_bin = pubkey.serialize()
     return pubkey_bin.hex()

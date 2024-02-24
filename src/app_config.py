@@ -187,7 +187,6 @@ class AppConfig(QObject):
 
         self.check_for_updates = True
         self.backup_config_file = True
-        self.read_proposals_external_attributes = True  # if True, some additional attributes will be downloaded from
         # external sources
         self.dont_use_file_dialogs = False
         self.confirm_when_voting = True
@@ -214,7 +213,7 @@ class AppConfig(QObject):
         self.encrypt_config_file = False
         self.config_file_encrypted = False
         self.fetch_network_data_after_start = True
-        self.show_dash_value_in_fiat = True
+        self.show_dash_value_in_fiat = False
         self.ui_use_dark_mode = False  # Use dark mode independently of the OS settings
         self.show_network_masternodes_tab = False
 
@@ -518,7 +517,6 @@ class AppConfig(QObject):
         self.dash_central_proposal_api = src_config.dash_central_proposal_api
         self.check_for_updates = src_config.check_for_updates
         self.backup_config_file = src_config.backup_config_file
-        self.read_proposals_external_attributes = src_config.read_proposals_external_attributes
         self.dont_use_file_dialogs = src_config.dont_use_file_dialogs
         self.confirm_when_voting = src_config.confirm_when_voting
         self.add_random_offset_to_vote_time = src_config.add_random_offset_to_vote_time
@@ -582,7 +580,6 @@ class AppConfig(QObject):
                     logging.info('Cleared the cached votes because of the spork 15 activation')
                     cur.execute('delete from VOTING_RESULTS')
                     cur.execute('delete from LIVE_CONFIG')
-                    cur.execute('update proposals set dmt_voting_last_read_time=0')
                     self.db_intf.commit()
                     self.display_app_message.emit(1000,
                                                   'Some of your voting results on proposals have been reset in '
@@ -639,7 +636,6 @@ class AppConfig(QObject):
         self.dash_nexus_proposal_api = 'https://api.dashnexus.org/proposals/%HASH%'
         self.check_for_updates = True
         self.backup_config_file = True
-        self.read_proposals_external_attributes = True
         self.dont_use_file_dialogs = False
         self.confirm_when_voting = True
         self.add_random_offset_to_vote_time = True
@@ -650,7 +646,7 @@ class AppConfig(QObject):
         self.encrypt_config_file = False
         self.config_file_encrypted = False
         self.fetch_network_data_after_start = True
-        self.show_dash_value_in_fiat = True
+        self.show_dash_value_in_fiat = False
         self.trezor_webusb = True
         self.trezor_bridge = True
         self.trezor_udp = True
@@ -777,8 +773,6 @@ class AppConfig(QObject):
                                                                             fallback='1'))
                 self.check_for_updates = self.value_to_bool(config.get(section, 'check_for_updates', fallback='1'))
                 self.backup_config_file = self.value_to_bool(config.get(section, 'backup_config_file', fallback='1'))
-                self.read_proposals_external_attributes = \
-                    self.value_to_bool(config.get(section, 'read_external_proposal_attributes', fallback='1'))
                 self.dont_use_file_dialogs = self.value_to_bool(config.get(section, 'dont_use_file_dialogs',
                                                                            fallback='0'))
                 self.confirm_when_voting = self.value_to_bool(config.get(section, 'confirm_when_voting',
@@ -881,7 +875,7 @@ class AppConfig(QObject):
 
                                 if mn.operator_key_type == InputKeyType.PRIVATE: 
                                     mn.operator_private_key = self.simple_decrypt(
-                                        config.get(section, 'operator_private_key', fallback='').strip(), False)
+                                        config.get(section, 'dmn_operator_private_key', fallback='').strip(), False)
                                 else:
                                     mn.operator_public_key = config.get(section, 'dmn_operator_public_key',
                                                                         fallback='').strip()
@@ -1126,8 +1120,6 @@ class AppConfig(QObject):
         config.set(section, 'check_for_updates', '1' if self.check_for_updates else '0')
         config.set(section, 'backup_config_file', '1' if self.backup_config_file else '0')
         config.set(section, 'dont_use_file_dialogs', '1' if self.dont_use_file_dialogs else '0')
-        config.set(section, 'read_external_proposal_attributes',
-                   '1' if self.read_proposals_external_attributes else '0')
         config.set(section, 'confirm_when_voting', '1' if self.confirm_when_voting else '0')
         config.set(section, 'fetch_network_data_after_start', '1' if self.fetch_network_data_after_start else '0')
         config.set(section, 'show_dash_value_in_fiat', '1' if self.show_dash_value_in_fiat else '0')
@@ -1243,7 +1235,6 @@ class AppConfig(QObject):
         all_data += str(self.check_for_updates)
         all_data += str(self.backup_config_file)
         all_data += str(self.dont_use_file_dialogs)
-        all_data += str(self.read_proposals_external_attributes)
         all_data += str(self.confirm_when_voting)
         all_data += str(self.fetch_network_data_after_start)
         all_data += str(self.show_dash_value_in_fiat)
@@ -1953,11 +1944,13 @@ class MasternodeConfig:
             return self.__collateral_tx_index
 
     @collateral_tx_index.setter
-    def collateral_tx_index(self, new_collateral_tx_index: str):
-        if new_collateral_tx_index:
+    def collateral_tx_index(self, new_collateral_tx_index):
+        if isinstance(new_collateral_tx_index, str):
             self.__collateral_tx_index = new_collateral_tx_index.strip()
+        elif new_collateral_tx_index is None:
+            self.__collateral_tx_index = None
         else:
-            self.__collateral_tx_index = new_collateral_tx_index
+            self.__collateral_tx_index = str(new_collateral_tx_index)
 
     @property
     def protocol_version(self) -> str:
@@ -2204,6 +2197,7 @@ class MasternodeConfig:
 
     def get_operator_pubkey(self, new_bls_scheme: bool) -> Optional[str]:
         if self.__operator_key_type == InputKeyType.PRIVATE:
+            print("\nPoinnnnnnt\n", self.__operator_private_key)
             if self.__operator_private_key:
                 try:
                     pubkey = dash_utils.bls_privkey_to_pubkey(self.__operator_private_key, new_bls_scheme)

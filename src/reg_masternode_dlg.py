@@ -152,13 +152,9 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
         if doc_url:
             self.lblDocumentation.setText(f'<a href="{doc_url}">Documentation</a>')
         self.rbMNTypeRegular.blockSignals(True)
-        self.rbMNTypeHPMN.blockSignals(True)
         if self.masternode_type == MasternodeType.REGULAR:
             self.rbMNTypeRegular.setChecked(True)
-        else:
-            self.rbMNTypeHPMN.setChecked(True)
         self.rbMNTypeRegular.blockSignals(False)
-        self.rbMNTypeHPMN.blockSignals(False)
         self.update_styles()
         self.update_dynamic_labels()
         self.update_ctrls_visibility()
@@ -488,13 +484,6 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
             self.update_ctrls_visibility()
 
     @pyqtSlot(bool)
-    def on_rbMNTypeHPMN_toggled(self, checked):
-        if checked:
-            self.masternode_type = MasternodeType.HPMN
-            self.update_fields_info(True)
-            self.update_ctrls_visibility()
-
-    @pyqtSlot(bool)
     def on_btnSelectCollateralUtxo_clicked(self):
         try:
             def apply_utxo(utxo):
@@ -534,7 +523,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
             if not found:
                 # WndUtils.warn_msg(f'Could not find any UTXO of {dash_value_to_find} Dash value in your wallet.')
                 if WndUtils.query_dlg(
-                        f"Could not find any UTXO of {dash_value_to_find} Dash value in your wallet.\n\n"
+                        f"Could not find any UTXO of {dash_value_to_find} Firo value in your wallet.\n\n"
                         f"To continue you must have an unspent {dash_value_to_find} Dash transaction output. "
                         f"Should I open a wallet window so you can create one? ",
                         buttons=QMessageBox.Yes | QMessageBox.No,
@@ -833,24 +822,23 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
         msg = ''
         style = ''
 
-        if self.deterministic_mns_spork_active:
-            if show_invalid_data_msg and self.voting_key_validation_err_msg:
-                msg = self.voting_key_validation_err_msg
-                style = 'error'
-            else:
-                if self.show_field_hinds:
-                    if self.dmn_voting_key_type == InputKeyType.PRIVATE:
-                        if self.edtVotingKey.text().strip() == self.voting_pkey_generated:
-                            msg = 'This is an automatically generated private key for voting. You can enter your own or ' \
-                                  'generate a new one by pressing the button on the right.'
-                        elif not self.edtVotingKey.text().strip():
-                            msg = 'Enter the private key for voting or generate a new one by clicking the button on ' \
-                                  'the right.'
-                        style = 'info'
-                    else:
-                        msg = 'You can use Firo address if the related private key is stored elsewhere, eg in ' \
-                              'the Firo Core wallet.'
-                        style = 'info'
+        if show_invalid_data_msg and self.voting_key_validation_err_msg:
+            msg = self.voting_key_validation_err_msg
+            style = 'error'
+        else:
+            if self.show_field_hinds:
+                if self.voting_key_type == InputKeyType.PRIVATE:
+                    if self.edtVotingKey.text().strip() == self.voting_pkey_generated:
+                        msg = 'This is an automatically generated private key for voting. You can enter your own or ' \
+                                'generate a new one by pressing the button on the right.'
+                    elif not self.edtVotingKey.text().strip():
+                        msg = 'Enter the private key for voting or generate a new one by clicking the button on ' \
+                                'the right.'
+                    style = 'info'
+                else:
+                    msg = 'You can use Firo address if the related private key is stored elsewhere, eg in ' \
+                            'the Firo Core wallet.'
+                    style = 'info'
 
         self.set_ctrl_message(self.lblVotingMsg, msg, style)
 
@@ -1203,7 +1191,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                 self.voting_privkey = ''
                 if not validate_address(self.voting_address, self.app_config.dash_network):
                     self.edtVotingKey.setFocus()
-                    self.voting_key_validation_err_msg = 'Invalid voting Dash address.'
+                    self.voting_key_validation_err_msg = 'Invalid voting Firo address.'
 
         if self.voting_key_validation_err_msg:
             self.upd_voting_key_info(True)
@@ -1309,11 +1297,6 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
         return ret
 
     def get_collateral_tx_address_thread(self, ctrl: CtrlObject, check_break_scanning_ext: Callable[[], bool]):
-        if self.masternode_type == MasternodeType.REGULAR:
-            collateral_value_needed = 1e11
-        else:
-            collateral_value_needed = 4e11
-
         txes_cnt = 0
         msg = ''
         break_scanning = False
@@ -1362,11 +1345,9 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                                         f'field.')
                     ads = spk.get('addresses')
                     if not ads or len(ads) < 0:
-                        raise Exception('The collateral transaction output doesn\'t have the Dash address assigned.')
-                    if vout.get('valueSat') != collateral_value_needed:
-                        raise Exception(f'The value of the collateral transaction output is not equal to '
-                                        f'{round(collateral_value_needed / 1e8)} Dash, which it should be '
-                                        f'for this type of masternode.\n\nSelect another tx output.')
+                        raise Exception('The collateral transaction output doesn\'t have the Firo address assigned.')
+                    if (vout.get('valueSat') if 'valueSat' in vout else vout['value'] * decimal.Decimal(1e8)) != 1000e8:
+                        raise Exception('The value of the collateral transaction output is not equal to 1000 FIRO.')
 
                     self.collateral_tx_address = ads[0]
                 else:
@@ -1396,7 +1377,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                           f'<br>This may take a while (<a href="break">break</a>)...'
                     self.collateral_tx_address_path = ''
             else:
-                msg = 'Looking for a BIP32 path of the Dash address related to the masternode collateral.<br>' \
+                msg = 'Looking for a BIP32 path of the Firo address related to the masternode collateral.<br>' \
                       'This may take a while (<a href="break">break</a>)....'
 
         except Exception as e:
@@ -1587,23 +1568,20 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
 
     def proregtx_automatic_thread(self, ctrl):
         log.debug('Starting proregtx_prepare_thread')
-
         def set_text(widget, text: str):
             def call(widget, text):
                 widget.setText(text)
                 widget.repaint()
                 widget.setVisible(True)
-
             WndUtils.call_in_main_thread(call, widget, text)
 
         def finished_with_success():
             def call():
                 self.next_step()
-
             WndUtils.call_in_main_thread(call)
 
+
         try:
-            green_color = get_widget_font_color_green(self)
             try:
                 mn_reg_support = self.dashd_intf.checkfeaturesupport('protx_register', self.app_config.app_version)
                 # is the "registration" feature enabled on the current rpc node?
@@ -1639,7 +1617,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                         bal_list = []
                         for addr in balances:
                             bal_list.append({'address': addr, 'amount': balances[addr]})
-                        bal_list.sort(key=lambda x: x['amount'])
+                        bal_list.sort(key = lambda x: x['amount'])
                         if not bal_list:
                             raise Exception("No address can be found in the node's wallet with sufficient funds to "
                                             "cover the transaction fees.")
@@ -1647,27 +1625,21 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                         random.shuffle(bal_list)
                         funding_address = bal_list[0]['address']
                     except JSONRPCException as e:
-                        log.info(
-                            "Couldn't list the node address balances. We assume you are using a public RPC node and "
-                            "the funding address for the transaction fees will be estimated during the "
-                            f"`{self.register_prepare_command_name}` call")
+                        log.info("Couldn't list the node address balances. We assume you are using a public RPC node and "
+                                 "the funding address for the transaction fees will be estimated during the "
+                                 "`register_prepare` call")
 
                 set_text(self.lblProtxTransaction1, '<b>1. Preparing a ProRegTx transaction on a remote node...</b>')
 
                 if self.owner_key_type == InputKeyType.PRIVATE:
-                    owner_address = wif_privkey_to_address(self.owner_privkey, self.app_config.dash_network)
+                    owner_key = self.owner_privkey
                 else:
-                    owner_address = self.owner_address
+                    owner_key = self.owner_address
 
-                params = [self.register_prepare_command_name, self.collateral_tx, self.collateral_tx_index,
-                          self.ip + ':' + str(self.tcp_port) if self.ip else '0', owner_address,
-                          self.operator_pubkey, self.voting_address,
-                          str(round(self.operator_reward, 2)),
+                params = ['register_prepare', self.collateral_tx, self.collateral_tx_index,
+                          self.ip + ':' + str(self.tcp_port) if self.ip else '', owner_key,
+                          self.operator_pubkey, self.voting_address, str(round(self.operator_reward, 2)),
                           self.owner_payout_addr]
-
-                if self.masternode_type == MasternodeType.HPMN:
-                    params.extend([self.platform_node_id, str(self.platform_p2p_port), str(self.platform_http_port)])
-
                 if funding_address:
                     params.append(funding_address)
 
@@ -1677,7 +1649,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                 msg_to_sign = call_ret.get('signMessage', '')
                 protx_tx = call_ret.get('tx')
 
-                log.debug(f'{self.register_prepare_command_name} returned: ' + call_ret_str)
+                log.debug('register_prepare returned: ' + call_ret_str)
                 set_text(self.lblProtxTransaction1,
                          '<b>1. Preparing a ProRegTx transaction on a remote node.</b> <span style="color:green">'
                          'Success.</span>')
@@ -1686,7 +1658,6 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                     self.lblProtxTransaction1,
                     '<b>1. Preparing a ProRegTx transaction on a remote node.</b> <span style="color:red">Failed '
                     f'with the following error: {str(e)}</span>')
-                log.exception(str(e))
                 return
 
             set_text(self.lblProtxTransaction2, '<b>Message to be signed:</b><br><code>' + msg_to_sign + '</code>')
@@ -1697,7 +1668,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                 payload_sig_str = self.sign_protx_message_with_hw(msg_to_sign)
 
                 set_text(self.lblProtxTransaction3, '<b>2. Signing message with hardware wallet.</b> '
-                                                    f'<span style="color:{green_color}">Success.</span>')
+                                                    '<span style="color:green">Success.</span>')
             except CancelException:
                 set_text(self.lblProtxTransaction3,
                          '<b>2. Signing message with hardware wallet.</b> <span style="color:red">Cancelled.</span>')
@@ -1710,8 +1681,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                 return
 
             # submitting signed transaction
-            set_text(self.lblProtxTransaction4,
-                     '<b>3. Submitting the signed protx transaction to the remote node...</b>')
+            set_text(self.lblProtxTransaction4, '<b>3. Submitting the signed protx transaction to the remote node...</b>')
             try:
                 self.dmn_reg_tx_hash = self.dashd_intf.rpc_call(True, False, 'protx', 'register_submit', protx_tx,
                                                                 payload_sig_str)
@@ -1719,7 +1689,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
                 log.debug('protx register_submit returned: ' + str(self.dmn_reg_tx_hash))
                 set_text(self.lblProtxTransaction4,
                          '<b>3. Submitting the signed protx transaction to the remote node.</b> <span style="'
-                         f'color:{green_color}">Success.</span>')
+                         'color:green">Success.</span>')
                 finished_with_success()
             except Exception as e:
                 log.exception('protx register_submit failed')
@@ -1773,20 +1743,14 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
             valid = validate_address(addr, self.app_config.dash_network)
             if valid:
                 if self.owner_key_type == InputKeyType.PRIVATE:
-                    owner_key = wif_privkey_to_address(self.owner_privkey, self.app_config.dash_network)
+                    owner_key = self.owner_privkey
                 else:
                     owner_key = self.owner_address
 
-                cmd = f'protx {self.register_prepare_command_name} "{self.collateral_tx}" ' \
-                      f'"{self.collateral_tx_index}" ' \
-                      f'"{self.ip + ":" + str(self.tcp_port) if self.ip else "0"}" ' \
-                      f'"{owner_key}" "{self.operator_pubkey}" "{self.voting_address}" ' \
-                      f'"{str(round(self.operator_reward, 2))}" "{self.owner_payout_addr}" '
-
-                if self.masternode_type == MasternodeType.HPMN:
-                    cmd += f'"{self.platform_node_id}" "{str(self.platform_p2p_port)}" "{str(self.platform_http_port)}"'
-
-                cmd += f' "{addr}"'
+                cmd = f'protx register_prepare "{self.collateral_tx}" "{self.collateral_tx_index}" ' \
+                    f'"{self.ip + ":" + str(self.tcp_port) if self.ip else "0"}" ' \
+                    f'"{owner_key}" "{self.operator_pubkey}" "{self.voting_address}" ' \
+                    f'"{str(round(self.operator_reward, 2))}" "{self.owner_payout_addr}" "{addr}"'
             else:
                 cmd = 'Enter the valid funding address in the exit box above'
         else:

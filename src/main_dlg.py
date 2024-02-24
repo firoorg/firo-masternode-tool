@@ -130,8 +130,6 @@ class MainWindow(QMainWindow, QDetectThemeChange, WndUtils, ui_main_dlg.Ui_MainW
                           icon_disabled="action-connect-network-disabled.png")
         WndUtils.set_icon(self, self.action_open_settings_window, "action-settings.png",
                           icon_disabled='action-settings-disabled.png')
-        WndUtils.set_icon(self, self.action_open_proposals_window, "action-proposals.png",
-                          icon_disabled="action-proposals-disabled.png")
         WndUtils.set_icon(self, self.action_connect_hw, "action-connect-hw.png",
                           icon_disabled="action-connect-hw-disabled.png")
         WndUtils.set_icon(self, self.action_disconnect_hw, "action-disconnect-hw.png",
@@ -148,7 +146,6 @@ class MainWindow(QMainWindow, QDetectThemeChange, WndUtils, ui_main_dlg.Ui_MainW
         self.action_save_config_file.setIconVisibleInMenu(False)
         self.action_check_network_connection.setIconVisibleInMenu(False)
         self.action_open_settings_window.setIconVisibleInMenu(False)
-        self.action_open_proposals_window.setIconVisibleInMenu(False)
         self.action_connect_hw.setIconVisibleInMenu(False)
         self.action_disconnect_hw.setIconVisibleInMenu(False)
         self.action_run_trezor_emulator.setIconVisibleInMenu(False)
@@ -585,20 +582,6 @@ class MainWindow(QMainWindow, QDetectThemeChange, WndUtils, ui_main_dlg.Ui_MainW
             self.info_msg('Wallet cache cleared.')
 
     @pyqtSlot(bool)
-    def on_action_clear_proposals_cache_triggered(self, checked):
-        if self.query_dlg('Do you really want to clear the proposals cache?',
-                          buttons=QMessageBox.Yes | QMessageBox.Cancel,
-                          default_button=QMessageBox.Cancel, icon=QMessageBox.Warning) == QMessageBox.Yes:
-            db_cursor = self.app_config.db_intf.get_cursor()
-            try:
-                db_cursor.execute('drop table proposals')
-                db_cursor.execute('drop table voting_results')
-                self.app_config.db_intf.create_structures()
-            finally:
-                self.app_config.db_intf.release_cursor()
-            self.info_msg('Proposals cache cleared.')
-
-    @pyqtSlot(bool)
     def on_action_check_for_updates_triggered(self, checked, force_check=True):
         try:
             self.run_thread(self, self.get_project_config_params_thread, (force_check,))
@@ -773,7 +756,7 @@ class MainWindow(QMainWindow, QDetectThemeChange, WndUtils, ui_main_dlg.Ui_MainW
 
         def connect_thread(ctrl):
             """
-            Test connection to dash network inside a thread to avoid blocking GUI.
+            Test connection to firo network inside a thread to avoid blocking GUI.
             :param ctrl: control structure to communicate with WorkerThread object (not used here)
             """
             try:
@@ -847,7 +830,7 @@ class MainWindow(QMainWindow, QDetectThemeChange, WndUtils, ui_main_dlg.Ui_MainW
             if self.dashd_connection_ok:
                 self.show_connection_successful()
                 if self.is_dashd_syncing:
-                     self.infoMsg('Connection successful, but Firo daemon is synchronizing.')
+                     self.info_msg('Connection successful, but Firo daemon is synchronizing.')
                 else:
                     self.info_msg('Connection successful.')
             else:

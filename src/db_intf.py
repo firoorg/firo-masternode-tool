@@ -149,18 +149,6 @@ class DBCache(object):
             cur.execute("CREATE INDEX IF NOT EXISTS IDX_masternodes_DMT_DEACTIVATION_TIME ON "
                         "masternodes(dmt_deactivation_time)")
 
-            # create structures for proposals:
-            cur.execute("CREATE TABLE IF NOT EXISTS proposals(id INTEGER PRIMARY KEY, name TEXT, payment_start TEXT,"
-                        " payment_end TEXT, payment_amount REAL, yes_count INTEGER, absolute_yes_count INTEGER,"
-                        " no_count INTEGER, abstain_count INTEGER, creation_time TEXT, url TEXT, payment_address TEXT,"
-                        " type INTEGER, hash TEXT,  collateral_hash TEXT, f_blockchain_validity INTEGER,"
-                        " f_cached_valid INTEGER, f_cached_delete INTEGER, f_cached_funding INTEGER, "
-                        " f_cached_endorsed INTEGER, object_type INTEGER, is_valid_reason TEXT, dmt_active INTEGER, "
-                        " dmt_create_time TEXT, dmt_deactivation_time TEXT, dmt_voting_last_read_time INTEGER,"
-                        " ext_attributes_loaded INTEGER, owner TEXT, title TEXT, ext_attributes_load_time INTEGER)")
-
-            cur.execute("CREATE INDEX IF NOT EXISTS idx_proposals_hash ON proposals(hash)")
-
             # structure for protx info
             cur.execute("CREATE TABLE IF NOT EXISTS protx(id INTEGER PRIMARY KEY, protx_hash TEXT, "
                         "operator_reward REAL, service TEXT, registered_height INTEGER, "
@@ -168,7 +156,6 @@ class DBCache(object):
                         "operator_payout_address TEXT)")
 
             # upgrade schema do v 0.9.11:
-            cur.execute("PRAGMA table_info(proposals)")
             columns = cur.fetchall()
             prop_owner_exists = False
             prop_title_exists = False
@@ -187,19 +174,6 @@ class DBCache(object):
                         ext_attributes_load_time_exists:
                     break
 
-            if not ext_attributes_loaded_exists:
-                # column for saving information whether additional attributes has been read from external sources
-                # like DashCentral.org (1: yes, 0: no)
-                cur.execute("ALTER TABLE proposals ADD COLUMN ext_attributes_loaded INTEGER")
-            if not prop_owner_exists:
-                # proposal's owner from an external source like DashCentral.org
-                cur.execute("ALTER TABLE proposals ADD COLUMN owner TEXT")
-            if not prop_title_exists:
-                # proposal's title from an external source like DashCentral.org
-                cur.execute("ALTER TABLE proposals ADD COLUMN title TEXT")
-            if not ext_attributes_load_time_exists:
-                # proposal's title from an external source like DashCentral.org
-                cur.execute("ALTER TABLE proposals ADD COLUMN ext_attributes_load_time INTEGER")
 
             cur.execute("CREATE TABLE IF NOT EXISTS voting_results(id INTEGER PRIMARY KEY, proposal_id INTEGER,"
                         " masternode_ident TEXT, voting_time TEXT, voting_result TEXT, signal TEXT, weight INTEGER,"

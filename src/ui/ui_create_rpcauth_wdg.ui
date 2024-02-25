@@ -60,7 +60,7 @@ General steps:
 &lt;ol&gt;
 &lt;li&gt;Enter the username and password that you will use to connect to your Firo node.&lt;/li&gt;
 &lt;li&gt;Generate the &lt;code&gt;rpcauth&lt;/code&gt; string.&lt;/li&gt;
-&lt;li&gt;Enter the resulting string into your node's &lt;code&gt;dash.conf&lt;/code&gt; file. It is also recommended to remove the &lt;code&gt;rpcuser&lt;/code&gt; and &lt;code&gt;rpcpassword&lt;/code&gt; parameters.&lt;/li&gt;
+&lt;li&gt;Enter the resulting string into your node's &lt;code&gt;firo.conf&lt;/code&gt; file. It is also recommended to remove the &lt;code&gt;rpcuser&lt;/code&gt; and &lt;code&gt;rpcpassword&lt;/code&gt; parameters.&lt;/li&gt;
 &lt;li&gt;Restart the &lt;code&gt;firod&lt;/code&gt; process.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h4&gt;Click &amp;lt;Continue&amp;gt; to go to step 1&lt;/h4&gt; </string>

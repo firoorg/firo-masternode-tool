@@ -1606,7 +1606,7 @@ class WdgAppMainView(QWidget, QDetectThemeChange, ui_app_main_view_wdg.Ui_WdgApp
             if show_dash_part:
                 ret_str = app_utils.to_string(amount)
                 if show_dash_lbl:
-                    ret_str += ' DASH'
+                    ret_str += ' FIRO'
 
             if (self.app_config.is_mainnet or SCREENSHOT_MODE) and self.last_dash_price_usd is not None and \
                     self.app_config.show_dash_value_in_fiat and show_fiat_part:

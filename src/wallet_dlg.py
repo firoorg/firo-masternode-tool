@@ -607,8 +607,8 @@ class WalletDlg(QDialog, ui_wallet_dlg.Ui_WalletDlg, WndUtils):
                     first_row = 0
 
                 self.rtm_last_dash_by_value, ok = QInputDialog.getDouble(
-                    self, 'Enter the value in Dash',
-                    'Enter the value (in Dash) you wish to select',
+                    self, 'Enter the value in Firo',
+                    'Enter the value (in Firo) you wish to select',
                     self.rtm_last_dash_by_value)
 
                 if ok:

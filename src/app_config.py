@@ -2197,7 +2197,6 @@ class MasternodeConfig:
 
     def get_operator_pubkey(self, new_bls_scheme: bool) -> Optional[str]:
         if self.__operator_key_type == InputKeyType.PRIVATE:
-            print("\nPoinnnnnnt\n", self.__operator_private_key)
             if self.__operator_private_key:
                 try:
                     pubkey = dash_utils.bls_privkey_to_pubkey(self.__operator_private_key, new_bls_scheme)

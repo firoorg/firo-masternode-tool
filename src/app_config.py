@@ -508,7 +508,7 @@ class AppConfig(QObject):
         self.dash_network = src_config.dash_network
         self.dash_net_configs = copy.deepcopy(src_config.dash_net_configs)
         self.random_dash_net_config = src_config.random_dash_net_config
-        self.__hw_type = src_config.__hw_type
+        self.hw_type = src_config.hw_type
         self.hw_keepkey_psw_encoding = src_config.hw_keepkey_psw_encoding
         self.block_explorer_tx_mainnet = src_config.block_explorer_tx_mainnet
         self.block_explorer_tx_testnet = src_config.block_explorer_tx_testnet
@@ -760,8 +760,10 @@ class AppConfig(QObject):
                     self.last_bip32_base_path = def_bip32_path
                 self.bip32_recursive_search = config.getboolean(section, 'bip32_recursive', fallback=True)
 
-                type = config.get(section, 'hw_type', fallback=HWType.trezor.value)
-                self.__hw_type = HWType.from_string(type)
+                self.hw_type = config.get(section, 'hw_type', fallback=HWType.trezor)
+                if self.hw_type not in (HWType.trezor, HWType.keepkey, HWType.ledger_nano):
+                    logging.warning('Invalid hardware wallet type: ' + self.hw_type)
+                    self.hw_type = HWType.trezor
 
                 self.hw_keepkey_psw_encoding = config.get(section, 'hw_keepkey_psw_encoding', fallback='NFC')
                 if self.hw_keepkey_psw_encoding not in ('NFC', 'NFKD'):
@@ -1112,8 +1114,8 @@ class AppConfig(QObject):
         config.set(section, 'CFG_VERSION', str(CURRENT_CFG_FILE_VERSION))
         config.set(section, 'log_level', self.log_level_str)
         config.set(section, 'dash_network', self.dash_network)
-        if self.__hw_type:
-            config.set(section, 'hw_type', self.__hw_type.value)
+        if self.hw_type:
+            config.set(section, 'hw_type', self.hw_type.value)
         config.set(section, 'hw_keepkey_psw_encoding', self.hw_keepkey_psw_encoding)
         config.set(section, 'bip32_base_path', self.last_bip32_base_path)
         config.set(section, 'random_dash_net_config', '1' if self.random_dash_net_config else '0')
@@ -1228,7 +1230,7 @@ class AppConfig(QObject):
         all_data = ''
         all_data += str(self.log_level_str)
         all_data += str(self.dash_network)
-        all_data += str(self.__hw_type.value) if self.__hw_type is not None else ''
+        all_data += str(self.hw_type.value) if self.hw_type is not None else ''
         all_data += str(self.hw_keepkey_psw_encoding)
         all_data += str(self.last_bip32_base_path)
         all_data += str(self.random_dash_net_config)
@@ -1686,18 +1688,7 @@ class AppConfig(QObject):
 
     @property
     def hw_coin_name(self):
-        if self.hw_session_info is None:
-            return self.get_zcoin()
-        if self.hw_session_info.hw_client is None:
-            return self.get_zcoin()
-        if self.hw_session_info.hw_type != "TREZOR":
-            return self.get_zcoin()
-        if self.hw_session_info.hw_client.version[0] == 1 \
-            and self.hw_session_info.hw_client.version[1] < 10:
-            return self.get_zcoin()
-        if self.hw_session_info.hw_client.version[0] == 2 \
-            and self.hw_session_info.hw_client.version[1] <= 3 \
-            and self.hw_session_info.hw_client.version[2] <= 6:
+        if self.hw_type == HWType.ledger_nano:
             return self.get_zcoin()
         return self.get_firo()
 

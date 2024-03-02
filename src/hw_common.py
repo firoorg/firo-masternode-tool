@@ -167,17 +167,6 @@ class HWDevice(object):
             desc += ' [' + additional + ']'
         return desc
 
-        self.__locks = {}  # key: hw_client, value: EnhRLock
-        self.__app_config = app_config
-        app_config.hw_session_info = self
-        self.__dashd_intf = dashd_intf
-        self.__get_hw_client_function = get_hw_client_function
-        self.__hw_connect_function: Callable = hw_connect_function
-        self.__hw_disconnect_function: Callable = hw_disconnect_function
-        self.__base_bip32_path: str = ''
-        self.__base_public_key: bytes = ''
-        self.__hd_tree_ident: str = ''
-
     def get_hw_model(self) -> Optional[HWModel]:
         return HWModel.from_string(self.hw_type, self.model_symbol)
 

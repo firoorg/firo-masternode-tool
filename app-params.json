@@ -1,13 +1,13 @@
 {
-  "appCurrentVersion": "0.9.26-hotfix2",
+  "appCurrentVersion": "0.9.37",
   "exeDownloads": {
-    "mac": "https://github.com/Bertrand256/dash-masternode-tool/releases/download/v0.9.26/DashMasternodeTool_0.9.26-hotfix2.mac.dmg",
-    "win64": "https://github.com/Bertrand256/dash-masternode-tool/releases/download/v0.9.26/DashMasternodeTool_0.9.26-hotfix2.win64.zip",
-    "linux": "https://github.com/Bertrand256/dash-masternode-tool/releases/download/v0.9.26/DashMasternodeTool_0.9.26-hotfix2.linux.tar.gz"
+    "mac": "https://github.com/Bertrand256/dash-masternode-tool/releases/download/v0.9.37/DashMasternodeTool_0.9.37.mac.dmg",
+    "win64": "https://github.com/Bertrand256/dash-masternode-tool/releases/download/v0.9.37/DashMasternodeTool_0.9.37.win64.zip",
+    "linux": "https://github.com/Bertrand256/dash-masternode-tool/releases/download/v0.9.37/DashMasternodeTool_0.9.37.linux.tar.gz"
   },
   "defaultDashdProtocol": {
-    "mainnet": 70214,
-    "testnet": 70214
+    "mainnet": 70227,
+    "testnet": 70227
   },
   "sporks": [
     {
@@ -93,6 +93,29 @@
         "priority": 4,
         "message": ""
       }
+    },
+    "NEW_BLS_SCHEME": {
+      "mainnet": {
+        "status": "enabled",
+        "priority": 4,
+        "message": ""
+      },
+      "testnet": {
+        "status": "enabled",
+        "priority": 4,
+        "message": ""
+      }
     }
-  }
+  },
+  "params": {
+    "voteTimeRandomOffsetMin": -720,
+    "voteTimeRandomOffsetMax": 60
+  },
+  "appDeveloperContact": [
+    {
+      "name": "674141414141426c674668315f5f7744765969575a78736a70306842357141646f7062447a525a6c4f5048514b35586376444341464a3572327432636a314d363044656133433442335a586f5379745548356d51353555494d4e474c6c56446e74773d3d",
+      "userId": "674141414141426c674668315f5f7744765969575a78736a70306842357141646f7062447a525a6c4f5048514b35586376444341464a3572327432636a314d363044656133433442335a586f5379745548356d51353555494d4e474c6c56446e74773d3d",
+      "url": "674141414141426c6746726b5034484453656858655f4b686c757256434930667a52797970715447673035724555487943463345735933503676324b58382d457075725859627365337575746e5834394f5a654946534b51326946693963716d5a4e554a3170344a57536850552d6450336c46547464673d"
+    }
+  ]
 }

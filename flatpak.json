@@ -141,7 +141,6 @@
         "install -D 'src/hw_setup_dlg.py' '/app/opt/firo-masternode-tool/src/hw_setup_dlg.py'",
         "install -D 'src/hw_word_dlg.py' '/app/opt/firo-masternode-tool/src/hw_word_dlg.py'",
         "install -D 'src/message_dlg.py' '/app/opt/firo-masternode-tool/src/message_dlg.py'",
-        "install -D 'src/proposals_dlg.py' '/app/opt/firo-masternode-tool/src/proposals_dlg.py'",
         "install -D 'src/psw_cache.py' '/app/opt/firo-masternode-tool/src/psw_cache.py'",
         "install -D 'src/reg_masternode_dlg.py' '/app/opt/firo-masternode-tool/src/reg_masternode_dlg.py'",
         "install -D 'src/revoke_mn_dlg.py' '/app/opt/firo-masternode-tool/src/revoke_mn_dlg.py'",
@@ -166,7 +165,6 @@
         "install -D 'src/ui/ui_main_dlg.py' '/app/opt/firo-masternode-tool/src/ui/ui_main_dlg.py'",
         "install -D 'src/ui/ui_masternode_details.py' '/app/opt/firo-masternode-tool/src/ui/ui_masternode_details.py'",
         "install -D 'src/ui/ui_message_dlg.py' '/app/opt/firo-masternode-tool/src/ui/ui_message_dlg.py'",
-        "install -D 'src/ui/ui_proposals.py' '/app/opt/firo-masternode-tool/src/ui/ui_proposals.py'",
         "install -D 'src/ui/ui_reg_masternode_dlg.py' '/app/opt/firo-masternode-tool/src/ui/ui_reg_masternode_dlg.py'",
         "install -D 'src/ui/ui_revoke_mn_dlg.py' '/app/opt/firo-masternode-tool/src/ui/ui_revoke_mn_dlg.py'",
         "install -D 'src/ui/ui_revoke_mn_dlg.ui.py' '/app/opt/firo-masternode-tool/src/ui/ui_revoke_mn_dlg.ui.py'",
@@ -722,11 +720,6 @@
         },
         {
           "type": "file",
-          "path": "src/proposals_dlg.py",
-          "dest": "src"
-        },
-        {
-          "type": "file",
           "path": "src/psw_cache.py",
           "dest": "src"
         },
@@ -843,11 +836,6 @@
         {
           "type": "file",
           "path": "src/ui/ui_message_dlg.py",
-          "dest": "src/ui"
-        },
-        {
-          "type": "file",
-          "path": "src/ui/ui_proposals.py",
           "dest": "src/ui"
         },
         {

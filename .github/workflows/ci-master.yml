@@ -73,7 +73,7 @@ jobs:
       with:
         python-version: '3.8.18'
     - name: Install Required System Packages
-      run: sudo apt-get -y install libudev-dev libusb-1.0-0-dev libfox-1.6-dev autotools-dev autoconf automake libtool libpython3-all-dev python3-pip git cmake libxcb-xinerama0
+      run: sudo apt-get update && sudo apt-get -y install libudev-dev libusb-1.0-0-dev libfox-1.6-dev autotools-dev autoconf automake libtool libpython3-all-dev python3-pip git cmake libxcb-xinerama0
     - name: Install Application Dependencies
       run: |
         pip install pip==21.2.4

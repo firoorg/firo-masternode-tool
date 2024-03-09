@@ -97,7 +97,7 @@ def control_hw_call(func):
         except (OSError, usb1.USBErrorNoDevice) as e:
             logging.exception('Exception calling %s function' % func.__name__)
             logging.info('Disconnecting HW after OSError occurred')
-            hw_session.hw_disconnect()
+            hw_session.disconnect_hardware_wallet()
             raise HWNotConnectedException('The hardware wallet device has been disconnected with the '
                                           'following error: ' + str(e))
 
@@ -948,6 +948,7 @@ class HwSessionInfo(HWSessionBase):
 
         self.__locks = {}  # key: hw_client, value: EnhRLock
         self.__main_dlg = main_dlg
+        app_config.hw_session_info = self
         self.__runtime_data: AppRuntimeData = runtime_data
         self.__base_bip32_path: str = ''
         self.__base_public_key: bytes = b''

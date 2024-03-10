@@ -760,10 +760,8 @@ class AppConfig(QObject):
                     self.last_bip32_base_path = def_bip32_path
                 self.bip32_recursive_search = config.getboolean(section, 'bip32_recursive', fallback=True)
 
-                self.hw_type = config.get(section, 'hw_type', fallback=HWType.trezor)
-                if self.hw_type not in (HWType.trezor, HWType.keepkey, HWType.ledger_nano):
-                    logging.warning('Invalid hardware wallet type: ' + self.hw_type)
-                    self.hw_type = HWType.trezor
+                type = config.get(section, 'hw_type', fallback=HWType.trezor.value)
+                self.hw_type = HWType.from_string(type)
 
                 self.hw_keepkey_psw_encoding = config.get(section, 'hw_keepkey_psw_encoding', fallback='NFC')
                 if self.hw_keepkey_psw_encoding not in ('NFC', 'NFKD'):
@@ -1688,9 +1686,20 @@ class AppConfig(QObject):
 
     @property
     def hw_coin_name(self):
-        if self.hw_type == HWType.ledger_nano:
+        if self.hw_session_info is None or \
+            self.hw_session_info.hw_client is None or \
+            self.hw_session_info.hw_type != HWType.trezor:
+                return self.get_zcoin()
+
+        trezor_version = self.hw_session_info.hw_client.version
+        if trezor_version[0] == 1 and trezor_version[1] < 10:
             return self.get_zcoin()
-        return self.get_firo()
+        elif trezor_version[0] == 2 and \
+            (trezor_version[1] < 3 or \
+            (trezor_version[1] == 3 and trezor_version[2] < 7)):
+                return self.get_zcoin()
+        else:
+            return self.get_firo()
 
     def get_block_explorer_tx(self):
         if self.dash_network == 'MAINNET':

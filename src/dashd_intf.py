@@ -1436,18 +1436,13 @@ class DashdInterface(WndUtils):
         else:
             raise Exception('Not connected')
 
-    @control_rpc_call(allow_switching_conns=False)
+    @control_rpc_call
     def sendrawtransaction(self, tx, use_instant_send):
         if self.open():
-            ni = self.rpc_call(False, False, 'getnetworkinfo')
-            if ni.get('version', 180000) >= 180000:
-                fee = 0
-            else:
-                fee = False
-
-            return self.proxy.sendrawtransaction(tx, fee, use_instant_send)
+            return self.proxy.sendrawtransaction(tx, False)
         else:
             raise Exception('Not connected')
+
 
     @control_rpc_call
     def getcurrentvotes(self, hash):

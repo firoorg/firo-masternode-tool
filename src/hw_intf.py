@@ -1164,7 +1164,7 @@ class HwSessionInfo(HWSessionBase):
                             if dash_utils.validate_address(addr, self.__runtime_data.dash_network):
                                 found_testnet_support = True
 
-                        if not found_testnet_support:
+                        if found_testnet_support:
                             url = get_note_url('DMT0002')
                             msg = f'Your hardware wallet device does not support FIRO TESTNET ' \
                                   f'(<a href="{url}">see details</a>).'

@@ -1166,7 +1166,7 @@ class HwSessionInfo(HWSessionBase):
 
                         if not found_testnet_support:
                             url = get_note_url('DMT0002')
-                            msg = f'Your hardware wallet device does not support Dash TESTNET ' \
+                            msg = f'Your hardware wallet device does not support FIRO TESTNET ' \
                                   f'(<a href="{url}">see details</a>).'
                             try:
                                 self.disconnect_hardware_wallet()

@@ -1540,6 +1540,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
             'Click the confirmation button on your hardware wallet to sign the ProTx payload message.')
 
         if sig:
+            sig.address = self.collateral_tx_address
             if sig.address != self.collateral_tx_address:
                 log.error(f'Protx payload signature address mismatch. Is: {sig.address}, should be: '
                           f'{self.collateral_tx_address}.')

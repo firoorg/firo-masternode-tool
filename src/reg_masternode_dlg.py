@@ -505,8 +505,6 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
 
             if self.masternode_type == MasternodeType.REGULAR:
                 dash_value_to_find = 1000
-            else:
-                dash_value_to_find = 4000
 
             if self.edtCollateralTx.text():
                 # If there is any value in the collateral tx edit box, don't automatically apply the possible
@@ -1382,7 +1380,7 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
 
         except Exception as e:
             res = self.query_dlg('Cannot verify the collateral transaction due to the following error: ' + str(e) +
-                                 '\n\nDo you rally want to continue?',
+                                 '\n\nDo you really want to continue?',
                                  buttons=QMessageBox.Yes | QMessageBox.Cancel,
                                  default_button=QMessageBox.Cancel, icon=QMessageBox.Warning)
             if res == QMessageBox.Cancel:

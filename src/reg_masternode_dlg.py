@@ -1327,6 +1327,8 @@ class RegMasternodeDlg(QDialog, QDetectThemeChange, ui_reg_masternode_dlg.Ui_Reg
             tx = self.dashd_intf.getrawtransaction(self.collateral_tx, 1, skip_cache=True)
 
             confirmations = tx.get('confirmations', 0)
+            if self.app_config.dash_network == "TESTNET":
+                MASTERNODE_TX_MINIMUM_CONFIRMATIONS = 2
             if confirmations < MASTERNODE_TX_MINIMUM_CONFIRMATIONS:
                 raise Exception(f'The collateral transaction does not yet have '
                                 f'the required number of {MASTERNODE_TX_MINIMUM_CONFIRMATIONS} confirmations. '

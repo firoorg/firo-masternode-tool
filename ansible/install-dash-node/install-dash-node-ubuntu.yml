@@ -309,7 +309,7 @@
             daemon=1
             externalip={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}
             [test]
-            port=19999
+            port=18168
         when: dashnode_testnet
         become_user: "{{ dashuser }}"
       when: not dash_conf_exists.stat.exists

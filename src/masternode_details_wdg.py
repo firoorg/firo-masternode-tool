@@ -1388,8 +1388,6 @@ class WdgMasternodeDetails(QWidget, ui_masternode_details_wdg.Ui_WdgMasternodeDe
 
             if self.masternode.masternode_type == MasternodeType.REGULAR:
                 dash_value_to_find = 1000
-            else:
-                dash_value_to_find = 4000
 
             address = self.edtCollateralAddress.text()
             if self.edtCollateralTxHash.text():

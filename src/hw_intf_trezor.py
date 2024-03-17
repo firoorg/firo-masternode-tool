@@ -24,6 +24,7 @@ from app_runtime_data import AppRuntimeData
 from common import CancelException, HwNotInitialized
 from hw_common import ask_for_pass_callback, ask_for_pin_callback, \
     ask_for_word_callback, HWSessionBase, HWType
+from dash_tx import DashTxType, serialize_cbTx, serialize_Lelantus, serialize_Spark
 import logging
 import wallet_common
 from wnd_utils import WndUtils
@@ -323,19 +324,6 @@ def close_session(client: MyTrezorClient):
 def json_to_tx(tx_json):
     t = btc.from_json(tx_json)
     dip2_type = tx_json.get("type", 0)
-
-    t.inputs =[]
-    for vin in tx_json["vin"]:
-        if "scriptSig" in vin and vin["scriptSig"]["hex"] == "c9":
-            i = messages.TxInputType()
-            i.prev_hash = b"\0" * 32
-            i.prev_index = vin["sequence"]
-            i.script_sig = bytes.fromhex(vin["scriptSig"]["hex"])
-            i.sequence = vin["sequence"]
-            t.inputs.append(i)
-        else:
-            t.inputs.append(_json_to_input(tx_json, vin))
-    t.bin_outputs = [_json_to_bin_output(tx_json, vout) for vout in tx_json["vout"]]
 
     if t.version == 3 and dip2_type != 0:
         if dip2_type == DashTxType.SPEC_CB_TX:

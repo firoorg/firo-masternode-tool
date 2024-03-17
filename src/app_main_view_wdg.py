@@ -1185,7 +1185,7 @@ class WdgAppMainView(QWidget, QDetectThemeChange, ui_app_main_view_wdg.Ui_WdgApp
                 mn_template = src_masternode.name + '-Clone'
             else:
                 if self.app_config.is_testnet:
-                    new_mn.tcp_port = 19999
+                    new_mn.tcp_port = 18186
                 mn_template = 'MN'
                 force_append_numbers = True
             name_found = None

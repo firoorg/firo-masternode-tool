@@ -75,7 +75,7 @@ jobs:
         pip install pip==21.2.4
         pip install -r requirements.txt
     - name: Bundle Application
-      run: python -m PyInstaller --distpath=../dist/linux --workpath=../dist/linux/build dash_masternode_tool.spec
+      run: python -m PyInstaller --distpath=bin --workpath=work dash_masternode_tool.spec
     - name: Upload Release Artifact
       uses: actions/upload-artifact@v2
       with:
@@ -104,7 +104,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: binaries-linux-amd64
-        path: bin/firo-masternode-tool
+        path: ${{ env.BIN_ROOT }}/linux/amd64
     - name: Generate Release Information
       shell: python
       run: |

@@ -69,9 +69,13 @@ jobs:
       with:
         python-version: '3.8.18'
     - name: Install Required System Packages
-      run: sudo apt-get update && sudo apt-get -y install libudev-dev libusb-1.0-0-dev libfox-1.6-dev autotools-dev autoconf automake libtool libpython3-all-dev python3-pip git cmake libxcb-xinerama0
+      run:  sudo apt-get update && sudo apt-get -y install libudev-dev libusb-1.0-0-dev libfox-1.6-dev autotools-dev autoconf automake libtool libpython3-all-dev python3-pip git cmake libxcb-xinerama0
+    - name: Install Application Dependencies
+      run: |
+        pip install pip==21.2.4
+        pip install -r requirements.txt
     - name: Bundle Application
-      run: python -m PyInstaller --distpath=../dist/linux --workpath=../dist/linux/build dash_masternode_tool.spec
+      run:  python -m PyInstaller --distpath=bin --workpath=work dash_masternode_tool.spec
     - name: Upload Release Artifact
       uses: actions/upload-artifact@v2
       with:
@@ -79,7 +83,7 @@ jobs:
         path: bin/firo-masternode-tool
   release:
     name: Draft Release
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     needs: [build-windows, build-mac, build-linux]
     env:
       BIN_ROOT: bin

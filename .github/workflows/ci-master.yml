@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-2019
     steps:
     - name: Checkout Source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Get Binary for libusb
       run: |
         Invoke-WebRequest -Uri https://github.com/libusb/libusb/releases/download/v1.0.23/libusb-1.0.23.7z -OutFile libusb.7z -UseBasicParsing
@@ -20,9 +20,9 @@ jobs:
     - name: Install libusb
       run: Copy-Item -Path "libusb\MS64\dll\libusb-1.0.dll" -Destination C:\Windows\System32\
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.9.0'
+        python-version: '3.9'
     - name: Install Application Dependencies
       run: |
         python -m pip install setuptools==65.3.0
@@ -31,7 +31,7 @@ jobs:
     - name: Bundle Application
       run: python -m PyInstaller --distpath=bin --workpath=work dash_masternode_tool.spec
     - name: Upload Release Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: binaries-win32-amd64
         path: bin\firo-masternode-tool.exe
@@ -40,11 +40,11 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: Checkout Source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.9.6'
+        python-version: '3.9'
     - name: Install Required System Packages
       run: brew install libusb
     - name: Install Application Dependencies
@@ -58,7 +58,7 @@ jobs:
     - name: Bundle Application
       run: pyinstaller --distpath=bin --workpath=work dash_masternode_tool.spec
     - name: Upload Release Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: binaries-osx-amd64
         path: bin/firo-masternode-tool.app
@@ -67,9 +67,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.8.18'
     - name: Install Required System Packages
@@ -81,7 +81,7 @@ jobs:
     - name: Bundle Application
       run: python -m PyInstaller --distpath=bin --workpath=work dash_masternode_tool.spec
     - name: Upload Release Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: binaries-linux-amd64
         path: bin/firo-masternode-tool
